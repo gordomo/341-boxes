@@ -40,8 +40,20 @@ export const SITE = {
 /** URL del perfil de Instagram. */
 export const INSTAGRAM_URL = `https://instagram.com/${SITE.INSTAGRAM}`;
 
-/** URL de WhatsApp (chat directo). */
+/** URL de WhatsApp (chat directo, sin mensaje). */
 export const WHATSAPP_URL = `https://wa.me/${SITE.WHATSAPP}`;
+
+/**
+ * Arma un link de WhatsApp con un mensaje pre-cargado.
+ * Ej: waLink("Hola, quiero un turno") → wa.me/549...?text=Hola%2C...
+ */
+export const waLink = (mensaje: string): string =>
+  `${WHATSAPP_URL}?text=${encodeURIComponent(mensaje)}`;
+
+/** Mensaje por defecto para el botón "Pedir turno". */
+export const WHATSAPP_TURNO_URL = waLink(
+  `Hola ${SITE.NOMBRE}, quiero pedir un turno para mi auto.`,
+);
 
 /** URL "mailto:" para el email. */
 export const EMAIL_URL = `mailto:${SITE.EMAIL}`;
