@@ -106,7 +106,7 @@ function SectionTitle({ index, children }: { index: string; children: React.Reac
 
 export default function PruebaEstilos() {
   return (
-    <main className="bg-surface text-on-surface min-h-screen">
+    <div className="bg-surface text-on-surface min-h-screen">
       {/* Header */}
       <header className="bg-carbon text-on-primary px-margin-mobile md:px-margin-desktop py-16">
         <span className="font-technical-data text-technical-data text-secondary uppercase tracking-widest">
@@ -328,6 +328,6 @@ export default function PruebaEstilos() {
           // FIN DE LA PÁGINA DE PRUEBA — BORRAR ANTES DE PRODUCCIÓN
         </p>
       </footer>
-    </main>
+    </div>
   );
 }

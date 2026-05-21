@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Anton, Hanken_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 // Títulos / display
 const anton = Anton({
@@ -48,7 +50,12 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-full font-body-md">{children}</body>
+      <body className="min-h-full flex flex-col font-body-md">
+        <Navbar />
+        {/* Compensa la altura de la navbar fija (logo + py-4 ≈ 72px) */}
+        <main className="flex flex-col flex-1 pt-[72px]">{children}</main>
+        <Footer />
+      </body>
     </html>
   );
 }
