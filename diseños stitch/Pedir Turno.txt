@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Hanken+Grotesk:wght@400;700&amp;family=JetBrains+Mono:wght@500;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .skew-btn {
+            clip-path: polygon(0 0, 95% 0, 100% 100%, 5% 100%);
+        }
+        .skew-btn-right {
+            clip-path: polygon(0 0, 85% 0, 100% 100%, 0% 100%);
+        }
+        .diagonal-divider {
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%);
+        }
+        /* Custom Scrollbar for Technical Feel */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #f9f9f9; }
+        ::-webkit-scrollbar-thumb { background: #000000; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-container": "#858383",
+                        "on-secondary-fixed": "#410100",
+                        "primary-container": "#1c1b1b",
+                        "on-error-container": "#93000a",
+                        "verde-bandera": "#00A352",
+                        "on-error": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#f9f9f9",
+                        "on-tertiary-fixed-variant": "#474747",
+                        "background": "#f9f9f9",
+                        "inverse-on-surface": "#f0f1f1",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-container": "#fffbff",
+                        "inverse-primary": "#c9c6c5",
+                        "tertiary-fixed": "#e4e2e2",
+                        "secondary-fixed": "#ffdad4",
+                        "inverse-surface": "#2f3131",
+                        "on-surface": "#1a1c1c",
+                        "secondary-container": "#e81105",
+                        "tertiary-fixed-dim": "#c8c6c6",
+                        "surface": "#f9f9f9",
+                        "surface-container-low": "#f3f3f4",
+                        "naranja-pitlane": "#FF6B00",
+                        "on-secondary-fixed-variant": "#930300",
+                        "outline-variant": "#c4c7c7",
+                        "tertiary": "#000000",
+                        "asfalto": "#4A4A4A",
+                        "secondary-fixed-dim": "#ffb4a8",
+                        "primary-fixed": "#e5e2e1",
+                        "outline": "#747878",
+                        "surface-dim": "#dadada",
+                        "on-tertiary-container": "#848483",
+                        "surface-container": "#eeeeee",
+                        "on-primary-fixed": "#1c1b1b",
+                        "primary": "#000000",
+                        "surface-variant": "#e2e2e2",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed": "#1b1c1c",
+                        "on-background": "#1a1c1c",
+                        "surface-container-highest": "#e2e2e2",
+                        "primary-fixed-dim": "#c9c6c5",
+                        "plata": "#C8C8CC",
+                        "error": "#ba1a1a",
+                        "surface-tint": "#5f5e5e",
+                        "tertiary-container": "#1b1c1c",
+                        "secondary": "#bb0400",
+                        "surface-container-high": "#e8e8e8",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed-variant": "#474646",
+                        "on-surface-variant": "#444748",
+                        "carbon": "#1C1C1E",
+                        "on-secondary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "margin-desktop": "80px",
+                        "section-gap": "120px",
+                        "unit": "8px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "technical-data": ["JetBrains Mono"],
+                        "headline-lg-mobile": ["Anton"],
+                        "label-caps": ["JetBrains Mono"],
+                        "body-lg": ["Hanken Grotesk"],
+                        "display-hero": ["Anton"],
+                        "body-md": ["Hanken Grotesk"],
+                        "headline-lg": ["Anton"],
+                        "headline-md": ["Anton"]
+                    },
+                    "fontSize": {
+                        "technical-data": ["13px", {"lineHeight": "18px", "fontWeight": "500"}],
+                        "headline-lg-mobile": ["36px", {"lineHeight": "40px", "fontWeight": "400"}],
+                        "label-caps": ["14px", {"lineHeight": "20px", "letterSpacing": "0.2em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "display-hero": ["96px", {"lineHeight": "90px", "letterSpacing": "-0.04em", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["48px", {"lineHeight": "52px", "fontWeight": "400"}],
+                        "headline-md": ["32px", {"lineHeight": "36px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-surface text-on-surface font-body-md overflow-x-hidden">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-4 md:px-margin-desktop py-4 bg-surface dark:bg-carbon border-b-2 border-primary dark:border-on-primary">
+<div class="font-headline-md text-headline-md text-primary dark:text-on-primary uppercase italic">341 BOXES</div>
+<div class="hidden md:flex gap-8 items-center">
+<a class="font-label-caps text-label-caps text-on-surface dark:text-on-surface-variant hover:text-secondary transition-colors duration-200" href="#">Home</a>
+<a class="font-label-caps text-label-caps text-on-surface dark:text-on-surface-variant hover:text-secondary transition-colors duration-200" href="#">Services</a>
+<a class="font-label-caps text-label-caps text-on-surface dark:text-on-surface-variant hover:text-secondary transition-colors duration-200" href="#">Franchises</a>
+</div>
+<button class="bg-primary text-on-primary font-label-caps text-technical-data px-6 py-2 uppercase skew-btn-right active:scale-95 transition-all">Request Appointment</button>
+</nav>
+<main class="mt-24 min-h-screen">
+<!-- Hero Progress Header -->
+<header class="px-4 md:px-margin-desktop py-12 bg-tertiary text-on-tertiary">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<h1 class="font-headline-lg text-headline-lg uppercase mb-2">Pedir Turno</h1>
+<p class="font-technical-data text-technical-data text-plata uppercase tracking-widest">PIT STOP BOOKING SYSTEM v2.0</p>
+</div>
+<!-- Technical Step Progress -->
+<div class="flex gap-4" id="step-indicator">
+<div class="flex flex-col gap-2 w-24">
+<div class="h-1 bg-secondary w-full" id="bar-1"></div>
+<span class="font-technical-data text-[10px] text-white">STEP 01</span>
+</div>
+<div class="flex flex-col gap-2 w-24">
+<div class="h-1 bg-asfalto w-full" id="bar-2"></div>
+<span class="font-technical-data text-[10px] text-plata">STEP 02</span>
+</div>
+<div class="flex flex-col gap-2 w-24">
+<div class="h-1 bg-asfalto w-full" id="bar-3"></div>
+<span class="font-technical-data text-[10px] text-plata">STEP 03</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Booking Flow Container -->
+<section class="px-4 md:px-margin-desktop py-section-gap">
+<div class="max-w-6xl mx-auto" id="booking-canvas">
+<!-- STEP 1: SELECT BOX (SERVICE TYPE) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter" id="step-1-content">
+<div class="col-span-full mb-8">
+<h2 class="font-headline-md text-headline-md uppercase border-l-4 border-secondary pl-4">Seleccionar Box de Servicio</h2>
+</div>
+<!-- Box Card 1 -->
+<div class="group border-2 border-primary p-8 hover:bg-primary hover:text-on-primary transition-all cursor-pointer service-card" onclick="nextStep(2, 'Service: Oil &amp; Filters')">
+<div class="flex justify-between items-start mb-12">
+<span class="material-symbols-outlined text-4xl group-hover:text-secondary" data-icon="oil_barrel">oil_barrel</span>
+<span class="font-technical-data text-technical-data opacity-50">BOX 01</span>
+</div>
+<h3 class="font-headline-md text-headline-md uppercase mb-4">Lubricentro</h3>
+<p class="font-body-md mb-8 opacity-70">Cambio de aceite, filtros y chequeo de fluidos críticos bajo estándares F1.</p>
+<div class="font-technical-data text-technical-data flex items-center gap-2">
+<span class="w-2 h-2 bg-verde-bandera"></span> ESTADO: DISPONIBLE
+                        </div>
+</div>
+<!-- Box Card 2 -->
+<div class="group border-2 border-primary p-8 hover:bg-primary hover:text-on-primary transition-all cursor-pointer service-card" onclick="nextStep(2, 'Service: Brakes &amp; Suspension')">
+<div class="flex justify-between items-start mb-12">
+<span class="material-symbols-outlined text-4xl group-hover:text-secondary" data-icon="settings_b_roll">settings_b_roll</span>
+<span class="font-technical-data text-technical-data opacity-50">BOX 02</span>
+</div>
+<h3 class="font-headline-md text-headline-md uppercase mb-4">Frenos y Suspensión</h3>
+<p class="font-body-md mb-8 opacity-70">Ajuste de precisión, rectificación y balanceo dinámico de alta velocidad.</p>
+<div class="font-technical-data text-technical-data flex items-center gap-2">
+<span class="w-2 h-2 bg-verde-bandera"></span> ESTADO: DISPONIBLE
+                        </div>
+</div>
+<!-- Box Card 3 -->
+<div class="group border-2 border-primary p-8 hover:bg-primary hover:text-on-primary transition-all cursor-pointer service-card" onclick="nextStep(2, 'Service: Full Diagnostics')">
+<div class="flex justify-between items-start mb-12">
+<span class="material-symbols-outlined text-4xl group-hover:text-secondary" data-icon="monitoring">monitoring</span>
+<span class="font-technical-data text-technical-data opacity-50">BOX 03</span>
+</div>
+<h3 class="font-headline-md text-headline-md uppercase mb-4">Escaneo y Tech</h3>
+<p class="font-body-md mb-8 opacity-70">Diagnóstico computarizado avanzado y reprogramación de sistemas electrónicos.</p>
+<div class="font-technical-data text-technical-data flex items-center gap-2">
+<span class="w-2 h-2 bg-verde-bandera"></span> ESTADO: DISPONIBLE
+                        </div>
+</div>
+</div>
+<!-- STEP 2: CALENDAR & TIME -->
+<div class="hidden grid grid-cols-1 lg:grid-cols-12 gap-gutter" id="step-2-content">
+<div class="lg:col-span-12 mb-8 flex items-center justify-between">
+<h2 class="font-headline-md text-headline-md uppercase border-l-4 border-secondary pl-4">Elegir Fecha y Hora</h2>
+<button class="font-technical-data text-technical-data uppercase underline decoration-secondary" onclick="prevStep(1)">Volver</button>
+</div>
+<!-- Technical Calendar Simulation -->
+<div class="lg:col-span-7 border-2 border-primary p-6">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-label-caps text-label-caps">OCTUBRE 2024</h3>
+<div class="flex gap-4">
+<span class="material-symbols-outlined cursor-pointer" data-icon="chevron_left">chevron_left</span>
+<span class="material-symbols-outlined cursor-pointer" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+<div class="grid grid-cols-7 gap-2 text-center font-technical-data text-[10px] mb-4 text-plata">
+<span>LUN</span><span>MAR</span><span>MIE</span><span>JUE</span><span>VIE</span><span>SAB</span><span>DOM</span>
+</div>
+<div class="grid grid-cols-7 gap-2 text-center font-technical-data">
+<!-- Empty spaces for calendar start -->
+<div class="p-4 border border-surface-container opacity-20">26</div>
+<div class="p-4 border border-surface-container opacity-20">27</div>
+<div class="p-4 border border-surface-container opacity-20">28</div>
+<div class="p-4 border border-primary hover:bg-secondary hover:text-white cursor-pointer transition-colors" onclick="selectDate(29)">29</div>
+<div class="p-4 border border-primary hover:bg-secondary hover:text-white cursor-pointer transition-colors" onclick="selectDate(30)">30</div>
+<div class="p-4 border border-primary hover:bg-secondary hover:text-white cursor-pointer transition-colors" onclick="selectDate(31)">31</div>
+<div class="p-4 bg-surface-container text-plata">01</div>
+<!-- Selection Logic would go here -->
+<div class="p-4 bg-primary text-white col-start-4">29</div>
+</div>
+</div>
+<!-- Time Slots -->
+<div class="lg:col-span-5 flex flex-col gap-4">
+<div class="bg-carbon text-white p-6">
+<p class="font-technical-data text-technical-data text-plata mb-4 uppercase">Horarios Disponibles</p>
+<div class="grid grid-cols-2 gap-2">
+<button class="border border-asfalto py-3 font-technical-data hover:bg-secondary transition-colors" onclick="selectTime('08:00 AM')">08:00 AM</button>
+<button class="border border-asfalto py-3 font-technical-data hover:bg-secondary transition-colors" onclick="selectTime('09:30 AM')">09:30 AM</button>
+<button class="border border-asfalto py-3 font-technical-data hover:bg-secondary transition-colors" onclick="selectTime('11:00 AM')">11:00 AM</button>
+<button class="border border-asfalto py-3 font-technical-data hover:bg-secondary transition-colors" onclick="selectTime('02:30 PM')">02:30 PM</button>
+<button class="border border-asfalto py-3 font-technical-data hover:bg-secondary transition-colors" onclick="selectTime('04:00 PM')">04:00 PM</button>
+<button class="border border-asfalto py-3 font-technical-data bg-secondary text-white">05:30 PM</button>
+</div>
+</div>
+<button class="bg-primary text-on-primary w-full py-5 font-label-caps uppercase skew-btn-right hover:bg-secondary transition-colors" onclick="nextStep(3)">Confirmar Slot</button>
+</div>
+</div>
+<!-- STEP 3: VEHICLE & CONTACT -->
+<div class="hidden max-w-2xl mx-auto" id="step-3-content">
+<div class="mb-8 flex items-center justify-between">
+<h2 class="font-headline-md text-headline-md uppercase border-l-4 border-secondary pl-4">Datos del Vehículo</h2>
+<button class="font-technical-data text-technical-data uppercase underline decoration-secondary" onclick="prevStep(2)">Volver</button>
+</div>
+<form class="space-y-12" onsubmit="confirmBooking(event)">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="relative">
+<label class="block font-label-caps text-technical-data text-asfalto uppercase mb-1">Patente / Dominio</label>
+<input class="w-full bg-transparent border-b-2 border-primary p-2 focus:outline-none focus:border-secondary uppercase font-headline-md" placeholder="AB 123 CD" type="text"/>
+</div>
+<div class="relative">
+<label class="block font-label-caps text-technical-data text-asfalto uppercase mb-1">Modelo del Vehículo</label>
+<input class="w-full bg-transparent border-b-2 border-primary p-2 focus:outline-none focus:border-secondary uppercase font-headline-md" placeholder="VW GOLF GTI" type="text"/>
+</div>
+</div>
+<div class="space-y-8 border-t border-plata pt-8">
+<h3 class="font-label-caps text-technical-data uppercase opacity-50">Información de Contacto</h3>
+<div class="relative">
+<label class="block font-label-caps text-technical-data text-asfalto uppercase mb-1">Nombre Completo</label>
+<input class="w-full bg-transparent border-b-2 border-primary p-2 focus:outline-none focus:border-secondary uppercase font-headline-md" type="text"/>
+</div>
+<div class="relative">
+<label class="block font-label-caps text-technical-data text-asfalto uppercase mb-1">WhatsApp</label>
+<input class="w-full bg-transparent border-b-2 border-primary p-2 focus:outline-none focus:border-secondary font-headline-md" type="tel"/>
+</div>
+</div>
+<button class="bg-primary text-on-primary w-full py-6 font-headline-md uppercase flex items-center justify-center gap-4 group" type="submit">
+                            FINALIZAR RESERVA
+                            <span class="material-symbols-outlined group-hover:translate-x-2 transition-transform" data-icon="rocket_launch">rocket_launch</span>
+</button>
+</form>
+</div>
+<!-- STEP 4: SUCCESS CONFIRMATION -->
+<div class="hidden text-center py-12 max-w-xl mx-auto" id="step-4-content">
+<div class="w-24 h-24 bg-verde-bandera text-white rounded-full flex items-center justify-center mx-auto mb-8 animate-bounce">
+<span class="material-symbols-outlined text-5xl" data-icon="check_circle" data-weight="fill">check_circle</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg uppercase mb-4">Turno Confirmado</h2>
+<p class="font-technical-data text-technical-data text-asfalto uppercase tracking-widest mb-12">BOOKING ID: #BOX-341-9928</p>
+<div class="bg-surface-container p-8 border-t-4 border-verde-bandera text-left mb-12">
+<div class="grid grid-cols-2 gap-4">
+<div>
+<p class="font-label-caps text-[10px] text-on-primary-container">FECHA</p>
+<p class="font-headline-md text-headline-md">29 OCT</p>
+</div>
+<div>
+<p class="font-label-caps text-[10px] text-on-primary-container">HORA</p>
+<p class="font-headline-md text-headline-md">17:30 HS</p>
+</div>
+<div class="col-span-2">
+<p class="font-label-caps text-[10px] text-on-primary-container">SERVICIO</p>
+<p class="font-body-lg font-bold">LUBRICENTRO - BOX 01</p>
+</div>
+</div>
+</div>
+<button class="font-technical-data text-technical-data uppercase underline decoration-verde-bandera" onclick="window.location.reload()">Descargar Comprobante PDF</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-section-gap px-4 md:px-margin-desktop flex flex-col md:flex-row justify-between items-start bg-tertiary dark:bg-black border-t-4 border-secondary">
+<div class="mb-12 md:mb-0">
+<div class="font-headline-lg text-headline-lg text-on-tertiary dark:text-white uppercase mb-4">341 BOXES</div>
+<p class="font-technical-data text-technical-data text-plata">© 2024 341 BOXES. PRECISION ENGINEERING.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
+<a class="font-technical-data text-technical-data text-plata hover:text-white transition-opacity" href="#">Av Eva Peron 5500 Rosario</a>
+<a class="font-technical-data text-technical-data text-plata hover:text-white transition-opacity" href="#">Instagram</a>
+<a class="font-technical-data text-technical-data text-plata hover:text-white transition-opacity" href="#">LinkedIn</a>
+<a class="font-technical-data text-technical-data text-plata hover:text-white transition-opacity" href="#">Terms of Service</a>
+</div>
+</footer>
+<script>
+        let currentStep = 1;
+
+        function updateProgress() {
+            for (let i = 1; i <= 3; i++) {
+                const bar = document.getElementById(`bar-${i}`);
+                if (i <= currentStep) {
+                    bar.classList.remove('bg-asfalto');
+                    bar.classList.add('bg-secondary');
+                } else {
+                    bar.classList.remove('bg-secondary');
+                    bar.classList.add('bg-asfalto');
+                }
+            }
+        }
+
+        function nextStep(step) {
+            document.getElementById(`step-${currentStep}-content`).classList.add('hidden');
+            document.getElementById(`step-${step}-content`).classList.remove('hidden');
+            currentStep = step;
+            updateProgress();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function prevStep(step) {
+            document.getElementById(`step-${currentStep}-content`).classList.add('hidden');
+            document.getElementById(`step-${step}-content`).classList.remove('hidden');
+            currentStep = step;
+            updateProgress();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function selectDate(day) {
+            // Logic for visual feedback would go here
+            console.log(`Selected day: ${day}`);
+        }
+
+        function selectTime(time) {
+            // Logic for visual feedback would go here
+            console.log(`Selected time: ${time}`);
+        }
+
+        function confirmBooking(e) {
+            e.preventDefault();
+            document.getElementById(`step-3-content`).classList.add('hidden');
+            document.getElementById(`step-4-content`).classList.remove('hidden');
+            document.getElementById('step-indicator').classList.add('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+<!-- Contextual Aesthetic Decoration -->
+<div class="fixed -bottom-20 -right-20 w-80 h-80 bg-secondary opacity-5 pointer-events-none transform rotate-45"></div>
+</body></html>

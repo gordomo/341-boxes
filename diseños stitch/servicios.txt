@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Hanken+Grotesk:wght@400;700&amp;family=JetBrains+Mono:wght@500;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary-container": "#858383",
+                    "on-secondary-fixed": "#410100",
+                    "primary-container": "#1c1b1b",
+                    "on-error-container": "#93000a",
+                    "verde-bandera": "#00A352",
+                    "on-error": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-bright": "#f9f9f9",
+                    "on-tertiary-fixed-variant": "#474747",
+                    "background": "#f9f9f9",
+                    "inverse-on-surface": "#f0f1f1",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-container": "#fffbff",
+                    "inverse-primary": "#c9c6c5",
+                    "tertiary-fixed": "#e4e2e2",
+                    "secondary-fixed": "#ffdad4",
+                    "inverse-surface": "#2f3131",
+                    "on-surface": "#1a1c1c",
+                    "secondary-container": "#e81105",
+                    "tertiary-fixed-dim": "#c8c6c6",
+                    "surface": "#f9f9f9",
+                    "surface-container-low": "#f3f3f4",
+                    "naranja-pitlane": "#FF6B00",
+                    "on-secondary-fixed-variant": "#930300",
+                    "outline-variant": "#c4c7c7",
+                    "tertiary": "#000000",
+                    "asfalto": "#4A4A4A",
+                    "secondary-fixed-dim": "#ffb4a8",
+                    "primary-fixed": "#e5e2e1",
+                    "outline": "#747878",
+                    "surface-dim": "#dadada",
+                    "on-tertiary-container": "#848483",
+                    "surface-container": "#eeeeee",
+                    "on-primary-fixed": "#1c1b1b",
+                    "primary": "#000000",
+                    "surface-variant": "#e2e2e2",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-fixed": "#1b1c1c",
+                    "on-background": "#1a1c1c",
+                    "surface-container-highest": "#e2e2e2",
+                    "primary-fixed-dim": "#c9c6c5",
+                    "plata": "#C8C8CC",
+                    "error": "#ba1a1a",
+                    "surface-tint": "#5f5e5e",
+                    "tertiary-container": "#1b1c1c",
+                    "secondary": "#bb0400",
+                    "surface-container-high": "#e8e8e8",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed-variant": "#474646",
+                    "on-surface-variant": "#444748",
+                    "carbon": "#1C1C1E",
+                    "on-secondary": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "margin-desktop": "80px",
+                    "section-gap": "120px",
+                    "unit": "8px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "technical-data": ["JetBrains Mono"],
+                    "headline-lg-mobile": ["Anton"],
+                    "label-caps": ["JetBrains Mono"],
+                    "body-lg": ["Hanken Grotesk"],
+                    "display-hero": ["Anton"],
+                    "body-md": ["Hanken Grotesk"],
+                    "headline-lg": ["Anton"],
+                    "headline-md": ["Anton"]
+            },
+            "fontSize": {
+                    "technical-data": ["13px", {"lineHeight": "18px", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["36px", {"lineHeight": "40px", "fontWeight": "400"}],
+                    "label-caps": ["14px", {"lineHeight": "20px", "letterSpacing": "0.2em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-hero": ["96px", {"lineHeight": "90px", "letterSpacing": "-0.04em", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["48px", {"lineHeight": "52px", "fontWeight": "400"}],
+                    "headline-md": ["32px", {"lineHeight": "36px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .skew-button { clip-path: polygon(0 0, 95% 0, 100% 100%, 0% 100%); }
+        .skew-divider { clip-path: polygon(0 0, 100% 0, 98% 100%, 2% 100%); }
+        .service-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .service-card:hover { transform: translateY(-4px); }
+        .diagonal-bg { 
+            background: linear-gradient(165deg, transparent 48%, rgba(225, 6, 0, 0.05) 50%, transparent 52%);
+            background-size: 100% 100%;
+        }
+        .technical-border { border-top: 4px solid #E10600; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md overflow-x-hidden">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-4 md:px-20 py-4 bg-surface border-b-2 border-primary">
+<div class="font-headline-md text-headline-md text-primary uppercase italic">341 BOXES</div>
+<div class="hidden md:flex gap-8">
+<a class="font-label-caps text-label-caps text-on-surface hover:text-secondary transition-colors" href="#">Home</a>
+<a class="font-label-caps text-label-caps text-secondary border-b-2 border-secondary" href="#">Services</a>
+<a class="font-label-caps text-label-caps text-on-surface hover:text-secondary transition-colors" href="#">Franchises</a>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2 skew-button uppercase font-label-caps text-sm active:scale-95 transition-all">Request Appointment</button>
+</nav>
+<main class="mt-24">
+<!-- Hero / Header Section -->
+<header class="px-margin-mobile md:px-margin-desktop py-12 md:py-24 relative overflow-hidden">
+<div class="absolute inset-0 diagonal-bg -z-10"></div>
+<div class="max-w-4xl">
+<span class="font-technical-data text-technical-data text-secondary uppercase tracking-widest mb-4 block">PRECISION ENGINEERING // PIT STOP READY</span>
+<h1 class="font-display-hero text-[64px] md:text-display-hero uppercase leading-none mb-6">NUESTROS <span class="text-secondary">BOXES</span></h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl border-l-4 border-primary pl-6">
+                    Soluciones de mantenimiento preventivo y correctivo con estándares de competencia. Velocidad de ejecución sin comprometer la precisión técnica.
+                </p>
+</div>
+</header>
+<!-- Technical Stats Bar -->
+<div class="bg-carbon text-white py-4 px-margin-mobile md:px-margin-desktop flex flex-wrap gap-8 items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="font-technical-data text-technical-data text-plata">STATUS:</span>
+<span class="font-technical-data text-technical-data text-verde-bandera flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-verde-bandera animate-pulse"></span> SYSTEM READY
+                </span>
+</div>
+<div class="flex items-center gap-8 overflow-x-auto no-scrollbar">
+<div class="whitespace-nowrap"><span class="font-technical-data text-plata">LATENCY:</span> <span class="font-technical-data">0.02ms</span></div>
+<div class="whitespace-nowrap"><span class="font-technical-data text-plata">PRECISION:</span> <span class="font-technical-data">99.9%</span></div>
+<div class="whitespace-nowrap"><span class="font-technical-data text-plata">CREW:</span> <span class="font-technical-data">F1 CERTIFIED</span></div>
+</div>
+</div>
+<!-- Services Grid -->
+<section class="px-margin-mobile md:px-margin-desktop py-section-gap grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Service 1: Oil -->
+<div class="service-card bg-white border border-primary technical-border p-8 flex flex-col h-full">
+<div class="flex justify-between items-start mb-6">
+<span class="material-symbols-outlined text-4xl text-secondary" data-icon="oil_barrel">oil_barrel</span>
+<span class="font-technical-data text-technical-data bg-plata/20 px-2 py-1">BOX_01</span>
+</div>
+<h3 class="font-headline-md text-headline-md uppercase mb-4">Cambio de Aceite y Filtros</h3>
+<p class="font-body-md text-on-surface-variant mb-8 flex-grow">
+                    Intervención rápida de lubricación de alta performance. Utilizamos fluidos sintéticos de competición para garantizar la integridad del motor a altas RPM.
+                </p>
+<div class="pt-6 border-t border-plata/30 flex justify-between items-center">
+<div class="flex flex-col">
+<span class="font-technical-data text-[10px] text-on-surface-variant uppercase">Est. Time</span>
+<span class="font-technical-data text-technical-data font-bold">25:00 MIN</span>
+</div>
+<button class="bg-primary text-on-primary px-4 py-2 uppercase font-label-caps text-xs skew-button hover:bg-secondary transition-colors">Consultar</button>
+</div>
+</div>
+<!-- Service 2: Engine -->
+<div class="service-card bg-white border border-primary technical-border p-8 flex flex-col h-full">
+<div class="flex justify-between items-start mb-6">
+<span class="material-symbols-outlined text-4xl text-secondary" data-icon="terminal">terminal</span>
+<span class="font-technical-data text-technical-data bg-plata/20 px-2 py-1">BOX_02</span>
+</div>
+<h3 class="font-headline-md text-headline-md uppercase mb-4">Diagnóstico Computarizado</h3>
+<p class="font-body-md text-on-surface-variant mb-8 flex-grow">
+                    Telemetría avanzada de abordo. Escaneo profundo de ECU, sensores y actuadores con reportes técnicos de grado ingeniería para detectar fallas invisibles.
+                </p>
+<div class="pt-6 border-t border-plata/30 flex justify-between items-center">
+<div class="flex flex-col">
+<span class="font-technical-data text-[10px] text-on-surface-variant uppercase">Base Price</span>
+<span class="font-technical-data text-technical-data font-bold">$12.500</span>
+</div>
+<button class="bg-primary text-on-primary px-4 py-2 uppercase font-label-caps text-xs skew-button hover:bg-secondary transition-colors">Consultar</button>
+</div>
+</div>
+<!-- Service 3: Brakes -->
+<div class="service-card bg-white border border-primary technical-border p-8 flex flex-col h-full">
+<div class="flex justify-between items-start mb-6">
+<span class="material-symbols-outlined text-4xl text-secondary" data-icon="car_repair">car_repair</span>
+<span class="font-technical-data text-technical-data bg-plata/20 px-2 py-1">BOX_03</span>
+</div>
+<h3 class="font-headline-md text-headline-md uppercase mb-4">Frenos y Seguridad</h3>
+<p class="font-body-md text-on-surface-variant mb-8 flex-grow">
+                    Calibración de frenado crítico. Reemplazo de pastillas cerámicas y purga de sistemas ABS para asegurar una desaceleración precisa en milisegundos.
+                </p>
+<div class="pt-6 border-t border-plata/30 flex justify-between items-center">
+<div class="flex flex-col">
+<span class="font-technical-data text-[10px] text-on-surface-variant uppercase">Est. Time</span>
+<span class="font-technical-data text-technical-data font-bold">45:00 MIN</span>
+</div>
+<button class="bg-primary text-on-primary px-4 py-2 uppercase font-label-caps text-xs skew-button hover:bg-secondary transition-colors">Consultar</button>
+</div>
+</div>
+<!-- Service 4: Battery -->
+<div class="service-card bg-white border border-primary technical-border p-8 flex flex-col h-full">
+<div class="flex justify-between items-start mb-6">
+<span class="material-symbols-outlined text-4xl text-secondary" data-icon="battery_charging_full">battery_charging_full</span>
+<span class="font-technical-data text-technical-data bg-plata/20 px-2 py-1">BOX_04</span>
+</div>
+<h3 class="font-headline-md text-headline-md uppercase mb-4">Batería y Sistema Eléctrico</h3>
+<p class="font-body-md text-on-surface-variant mb-8 flex-grow">
+                    Gestión de energía. Verificación de alternador y reemplazo de celdas con alta capacidad de arranque en frío. Optimización de circuitos eléctricos.
+                </p>
+<div class="pt-6 border-t border-plata/30 flex justify-between items-center">
+<div class="flex flex-col">
+<span class="font-technical-data text-[10px] text-on-surface-variant uppercase">Reliability</span>
+<span class="font-technical-data text-technical-data font-bold text-verde-bandera">99.8%</span>
+</div>
+<button class="bg-primary text-on-primary px-4 py-2 uppercase font-label-caps text-xs skew-button hover:bg-secondary transition-colors">Consultar</button>
+</div>
+</div>
+<!-- Service 5: Cooling -->
+<div class="service-card bg-white border border-primary technical-border p-8 flex flex-col h-full">
+<div class="flex justify-between items-start mb-6">
+<span class="material-symbols-outlined text-4xl text-secondary" data-icon="thermostat">thermostat</span>
+<span class="font-technical-data text-technical-data bg-plata/20 px-2 py-1">BOX_05</span>
+</div>
+<h3 class="font-headline-md text-headline-md uppercase mb-4">Refrigeración</h3>
+<p class="font-body-md text-on-surface-variant mb-8 flex-grow">
+                    Control térmico total. Limpieza de radiadores, reemplazo de bombas de agua y líquidos refrigerantes de alta conductividad para evitar el overheat.
+                </p>
+<div class="pt-6 border-t border-plata/30 flex justify-between items-center">
+<div class="flex flex-col">
+<span class="font-technical-data text-[10px] text-on-surface-variant uppercase">Critical Check</span>
+<span class="font-technical-data text-technical-data font-bold">12 POINTS</span>
+</div>
+<button class="bg-primary text-on-primary px-4 py-2 uppercase font-label-caps text-xs skew-button hover:bg-secondary transition-colors">Consultar</button>
+</div>
+</div>
+<!-- Service 6: Tires -->
+<div class="service-card bg-white border border-primary technical-border p-8 flex flex-col h-full">
+<div class="flex justify-between items-start mb-6">
+<span class="material-symbols-outlined text-4xl text-secondary" data-icon="tire_repair">tire_repair</span>
+<span class="font-technical-data text-technical-data bg-plata/20 px-2 py-1">BOX_06</span>
+</div>
+<h3 class="font-headline-md text-headline-md uppercase mb-4">Neumáticos y Alineación</h3>
+<p class="font-body-md text-on-surface-variant mb-8 flex-grow">
+                    Geometría de suspensión y contacto con el suelo. Alineación láser 3D para una respuesta de dirección inmediata y desgaste simétrico de cubiertas.
+                </p>
+<div class="pt-6 border-t border-plata/30 flex justify-between items-center">
+<div class="flex flex-col">
+<span class="font-technical-data text-[10px] text-on-surface-variant uppercase">Precision</span>
+<span class="font-technical-data text-technical-data font-bold">0.001 MM</span>
+</div>
+<button class="bg-primary text-on-primary px-4 py-2 uppercase font-label-caps text-xs skew-button hover:bg-secondary transition-colors">Consultar</button>
+</div>
+</div>
+</section>
+<!-- Brand Strip -->
+<div class="bg-primary py-12 px-margin-mobile overflow-hidden flex items-center gap-12">
+<div class="flex gap-12 animate-marquee whitespace-nowrap">
+<span class="font-headline-lg text-white uppercase italic opacity-20">341 BOXES</span>
+<span class="font-headline-lg text-white uppercase italic opacity-20">PRECISION</span>
+<span class="font-headline-lg text-white uppercase italic opacity-20">PERFORMANCE</span>
+<span class="font-headline-lg text-white uppercase italic opacity-20">ENGINEERING</span>
+<span class="font-headline-lg text-white uppercase italic opacity-20">341 BOXES</span>
+<span class="font-headline-lg text-white uppercase italic opacity-20">PRECISION</span>
+<span class="font-headline-lg text-white uppercase italic opacity-20">PERFORMANCE</span>
+<span class="font-headline-lg text-white uppercase italic opacity-20">ENGINEERING</span>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-24 px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-start bg-tertiary text-white border-t-4 border-secondary">
+<div class="mb-12 md:mb-0">
+<div class="font-headline-lg text-headline-lg text-white uppercase mb-4">341 BOXES</div>
+<p class="font-technical-data text-plata max-w-sm mb-8 uppercase">CENTRO DE INGENIERÍA MECÁNICA DE ALTO RENDIMIENTO.</p>
+<div class="flex gap-4">
+<a class="hover:text-secondary transition-colors" href="#"><span class="material-symbols-outlined">share</span></a>
+<a class="hover:text-secondary transition-colors" href="#"><span class="material-symbols-outlined">alternate_email</span></a>
+<a class="hover:text-secondary transition-colors" href="#"><span class="material-symbols-outlined">location_on</span></a>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-16">
+<div class="flex flex-col gap-4">
+<span class="font-technical-data text-secondary">CONTACT</span>
+<a class="font-technical-data text-plata hover:text-white" href="#">Av Eva Peron 5500 Rosario</a>
+<a class="font-technical-data text-plata hover:text-white" href="#">Instagram</a>
+<a class="font-technical-data text-plata hover:text-white" href="#">LinkedIn</a>
+</div>
+<div class="flex flex-col gap-4">
+<span class="font-technical-data text-secondary">LEGAL</span>
+<a class="font-technical-data text-plata hover:text-white" href="#">Terms of Service</a>
+<a class="font-technical-data text-plata hover:text-white" href="#">Privacy Policy</a>
+</div>
+</div>
+<div class="mt-12 md:mt-0 md:text-right">
+<span class="font-technical-data text-technical-data text-plata block mb-2 uppercase">© 2024 341 BOXES. PRECISION ENGINEERING.</span>
+<span class="font-technical-data text-[10px] text-on-tertiary-container block">ALL SYSTEMS OPERATIONAL</span>
+</div>
+</footer>
+<style>
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+            display: flex;
+            animation: marquee 30s linear infinite;
+            width: fit-content;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<script>
+        // Simple micro-interaction for active nav states and subtle effects
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.querySelector('.material-symbols-outlined').style.fontVariationSettings = "'FILL' 1";
+            });
+            card.addEventListener('mouseleave', () => {
+                card.querySelector('.material-symbols-outlined').style.fontVariationSettings = "'FILL' 0";
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>341 BOXES | Mecánica de Podio</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Hanken+Grotesk:wght@400;700&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "on-primary-container": "#858383",
+                "on-secondary-fixed": "#410100",
+                "primary-container": "#1c1b1b",
+                "on-error-container": "#93000a",
+                "verde-bandera": "#00A352",
+                "on-error": "#ffffff",
+                "surface-container-lowest": "#ffffff",
+                "surface-bright": "#f9f9f9",
+                "on-tertiary-fixed-variant": "#474747",
+                "background": "#f9f9f9",
+                "inverse-on-surface": "#f0f1f1",
+                "on-tertiary": "#ffffff",
+                "on-secondary-container": "#fffbff",
+                "inverse-primary": "#c9c6c5",
+                "tertiary-fixed": "#e4e2e2",
+                "secondary-fixed": "#ffdad4",
+                "inverse-surface": "#2f3131",
+                "on-surface": "#1a1c1c",
+                "secondary-container": "#e81105",
+                "tertiary-fixed-dim": "#c8c6c6",
+                "surface": "#f9f9f9",
+                "surface-container-low": "#f3f3f4",
+                "naranja-pitlane": "#FF6B00",
+                "on-secondary-fixed-variant": "#930300",
+                "outline-variant": "#c4c7c7",
+                "tertiary": "#000000",
+                "asfalto": "#4A4A4A",
+                "secondary-fixed-dim": "#ffb4a8",
+                "primary-fixed": "#e5e2e1",
+                "outline": "#747878",
+                "surface-dim": "#dadada",
+                "on-tertiary-container": "#848483",
+                "surface-container": "#eeeeee",
+                "on-primary-fixed": "#1c1b1b",
+                "primary": "#000000",
+                "surface-variant": "#e2e2e2",
+                "on-primary": "#ffffff",
+                "on-tertiary-fixed": "#1b1c1c",
+                "on-background": "#1a1c1c",
+                "surface-container-highest": "#e2e2e2",
+                "primary-fixed-dim": "#c9c6c5",
+                "plata": "#C8C8CC",
+                "error": "#ba1a1a",
+                "surface-tint": "#5f5e5e",
+                "tertiary-container": "#1b1c1c",
+                "secondary": "#bb0400",
+                "surface-container-high": "#e8e8e8",
+                "error-container": "#ffdad6",
+                "on-primary-fixed-variant": "#474646",
+                "on-surface-variant": "#444748",
+                "carbon": "#1C1C1E",
+                "on-secondary": "#ffffff"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "margin-mobile": "16px",
+                "margin-desktop": "80px",
+                "section-gap": "120px",
+                "unit": "8px",
+                "gutter": "24px"
+            },
+            "fontFamily": {
+                "technical-data": ["JetBrains Mono"],
+                "headline-lg-mobile": ["Anton"],
+                "label-caps": ["JetBrains Mono"],
+                "body-lg": ["Hanken Grotesk"],
+                "display-hero": ["Anton"],
+                "body-md": ["Hanken Grotesk"],
+                "headline-lg": ["Anton"],
+                "headline-md": ["Anton"]
+            },
+            "fontSize": {
+                "technical-data": ["13px", {"lineHeight": "18px", "fontWeight": "500"}],
+                "headline-lg-mobile": ["36px", {"lineHeight": "40px", "fontWeight": "400"}],
+                "label-caps": ["14px", {"lineHeight": "20px", "letterSpacing": "0.2em", "fontWeight": "700"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                "display-hero": ["96px", {"lineHeight": "90px", "letterSpacing": "-0.04em", "fontWeight": "400"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "headline-lg": ["48px", {"lineHeight": "52px", "fontWeight": "400"}],
+                "headline-md": ["32px", {"lineHeight": "36px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .skewed-btn {
+            clip-path: polygon(0 0, 100% 0, 95% 100%, 0% 100%);
+        }
+        .skewed-btn-reverse {
+            clip-path: polygon(5% 0, 100% 0, 100% 100%, 0% 100%);
+        }
+        .diagonal-divider {
+            clip-path: polygon(0 15%, 100% 0, 100% 85%, 0 100%);
+        }
+        .f1-grid-pattern {
+            background-image: radial-gradient(#C8C8CC 0.5px, transparent 0.5px);
+            background-size: 24px 24px;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-secondary selection:text-white overflow-x-hidden">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4 bg-surface dark:bg-carbon border-b-2 border-primary dark:border-on-primary">
+<div class="font-headline-md text-headline-md text-primary dark:text-on-primary uppercase italic">
+            341 BOXES
+        </div>
+<div class="hidden md:flex gap-gutter items-center">
+<a class="font-label-caps text-label-caps text-secondary dark:text-secondary-container border-b-2 border-secondary hover:text-secondary transition-colors duration-200" href="#">Home</a>
+<a class="font-label-caps text-label-caps text-on-surface dark:text-on-surface-variant hover:text-secondary transition-colors duration-200" href="#">Services</a>
+<a class="font-label-caps text-label-caps text-on-surface dark:text-on-surface-variant hover:text-secondary transition-colors duration-200" href="#">Franchises</a>
+</div>
+<button class="bg-primary text-on-primary font-label-caps text-technical-data px-6 py-3 skewed-btn transition-all active:scale-95 hover:bg-secondary">
+            Request Appointment
+        </button>
+</nav>
+<main class="pt-[72px]">
+<!-- Hero Section -->
+<section class="relative h-[921px] flex items-center overflow-hidden bg-primary">
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover opacity-60" data-alt="A cinematic, high-contrast photograph of a professional Formula 1 pit stop crew in mid-action, wearing sleek black and red technical uniforms. The scene is illuminated by dramatic overhead stadium lighting, casting long shadows on the dark asphalt track. The atmosphere is intense and high-performance, featuring a blurred background of a high-tech workshop garage with glowing diagnostic monitors. The color palette is dominated by deep blacks and vibrant red accents, emphasizing mechanical precision." src="https://lh3.googleusercontent.com/aida-public/AB6AXuALKiG-mAjLRm8Qh_FwmYETbRy7ccRIHPqWyk1NRRKS3CC_QE23Qcw5AEMUV_M6OAQwiFRD2m65KK1VS6fYEVoIKDOLRyFrc1cCgPhXLx3mVR00ERolFRt34tEVJ6mrWczbONceYEx2_6BPO3CcBKoSOyCRroefK-ApDH_M81RoecETtzPeLzxMoVnw3EDkhFzWyVgcD09thNLhkUq7_ac9cK1m1ceYmJBMby2q70lBbnJZOgMElXZjQcyEAldqVSLABE2trIb8yiUy"/>
+</div>
+<div class="relative z-10 px-margin-mobile md:px-margin-desktop w-full">
+<div class="max-w-4xl space-y-6">
+<p class="font-technical-data text-technical-data text-secondary uppercase tracking-[0.3em]">Precision Engineering</p>
+<h1 class="font-display-hero text-headline-lg-mobile md:text-display-hero text-on-primary leading-tight">
+                        341 BOXES:<br/>MECÁNICA DE PODIO
+                    </h1>
+<p class="font-body-lg text-body-lg text-plata max-w-2xl">
+                        Precisión técnica para tu vehículo cotidiano. Llevamos el estándar de la alta competición a tu mantenimiento diario.
+                    </p>
+<div class="flex flex-col md:flex-row gap-4 pt-4">
+<button class="bg-secondary text-white font-label-caps text-label-caps px-10 py-5 skewed-btn hover:bg-white hover:text-primary transition-all duration-300">
+                            Pedir Turno
+                        </button>
+<button class="border-2 border-white text-white font-label-caps text-label-caps px-10 py-5 hover:bg-white hover:text-primary transition-all duration-300">
+                            Ver Servicios
+                        </button>
+</div>
+</div>
+</div>
+<!-- Technical Data Overlay -->
+<div class="absolute bottom-10 right-10 hidden lg:block text-right">
+<div class="font-technical-data text-technical-data text-plata space-y-1">
+<p>SYSTEM_STATUS: OPTIMAL</p>
+<p>LATENCY: 0.002MS</p>
+<p>LOCATION: PIT_LANE_01</p>
+</div>
+</div>
+</section>
+<!-- Services Section -->
+<section class="py-section-gap px-margin-mobile md:px-margin-desktop bg-surface f1-grid-pattern">
+<div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+<div>
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary uppercase">Boxes de Servicio</h2>
+<div class="h-1 w-24 bg-secondary mt-4"></div>
+</div>
+<p class="font-body-md text-body-md text-asfalto max-w-md">
+                    Diagnóstico computarizado y ejecución técnica bajo protocolos de escudería internacional.
+                </p>
+</div>
+<!-- Bento Grid Services -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Oil -->
+<div class="group border border-primary p-unit bg-white hover:bg-primary transition-all duration-300 cursor-pointer">
+<div class="p-8 border border-plata group-hover:border-secondary flex flex-col h-full">
+<span class="material-symbols-outlined text-secondary text-5xl mb-6" data-icon="oil_barrel">oil_barrel</span>
+<h3 class="font-headline-md text-headline-md text-primary group-hover:text-white uppercase">Aceite</h3>
+<p class="font-body-md text-body-md text-asfalto group-hover:text-plata mt-4 flex-grow">Lubricación sintética de alto rendimiento para máxima protección térmica.</p>
+<div class="mt-8 font-technical-data text-technical-data text-secondary">ID: SRV_LUB_01</div>
+</div>
+</div>
+<!-- Engine -->
+<div class="group border-t-4 border-secondary border-l border-r border-b border-primary p-unit bg-primary hover:bg-secondary transition-all duration-300 cursor-pointer md:row-span-2">
+<div class="p-8 flex flex-col h-full text-white">
+<span class="material-symbols-outlined text-white text-6xl mb-6" data-icon="engine">earth_engine</span>
+<h3 class="font-headline-md text-headline-md uppercase">Motor &amp; Diagnóstico</h3>
+<p class="font-body-md text-body-md text-plata mt-4 flex-grow">Escaneo completo y optimización de parámetros ECU para eficiencia máxima de combustible y potencia.</p>
+<ul class="font-technical-data text-technical-data text-white/70 space-y-2 mt-8">
+<li>&gt; SCAN_FULL_SYS</li>
+<li>&gt; SENSOR_CALIBRATION</li>
+<li>&gt; EMISSION_TEST</li>
+</ul>
+</div>
+</div>
+<!-- Brakes -->
+<div class="group border border-primary p-unit bg-white hover:bg-primary transition-all duration-300 cursor-pointer">
+<div class="p-8 border border-plata group-hover:border-secondary flex flex-col h-full">
+<span class="material-symbols-outlined text-secondary text-5xl mb-6" data-icon="brake_disc">disc_full</span>
+<h3 class="font-headline-md text-headline-md text-primary group-hover:text-white uppercase">Frenos</h3>
+<p class="font-body-md text-body-md text-asfalto group-hover:text-plata mt-4 flex-grow">Control de fatiga, discos y pastillas con materiales de fricción cerámica.</p>
+<div class="mt-8 font-technical-data text-technical-data text-secondary">ID: SRV_BRK_02</div>
+</div>
+</div>
+<!-- Battery -->
+<div class="group border border-primary p-unit bg-white hover:bg-primary transition-all duration-300 cursor-pointer">
+<div class="p-8 border border-plata group-hover:border-secondary flex flex-col h-full">
+<span class="material-symbols-outlined text-secondary text-5xl mb-6" data-icon="battery_charging_full">battery_charging_full</span>
+<h3 class="font-headline-md text-headline-md text-primary group-hover:text-white uppercase">Batería</h3>
+<p class="font-body-md text-body-md text-asfalto group-hover:text-plata mt-4 flex-grow">Análisis de carga reactiva y reemplazo por celdas de alta densidad.</p>
+<div class="mt-8 font-technical-data text-technical-data text-secondary">ID: SRV_PWR_03</div>
+</div>
+</div>
+<!-- Tires -->
+<div class="group border border-primary p-unit bg-white hover:bg-primary transition-all duration-300 cursor-pointer">
+<div class="p-8 border border-plata group-hover:border-secondary flex flex-col h-full">
+<span class="material-symbols-outlined text-secondary text-5xl mb-6" data-icon="tire_repair">tire_repair</span>
+<h3 class="font-headline-md text-headline-md text-primary group-hover:text-white uppercase">Neumáticos</h3>
+<p class="font-body-md text-body-md text-asfalto group-hover:text-plata mt-4 flex-grow">Alineación 3D láser y balanceo dinámico para un grip superior.</p>
+<div class="mt-8 font-technical-data text-technical-data text-secondary">ID: SRV_TR_05</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Franchise Teaser Section -->
+<section class="relative bg-primary text-white overflow-hidden py-section-gap">
+<div class="absolute inset-0 opacity-20 pointer-events-none">
+<div class="h-full w-full diagonal-divider bg-secondary transform -rotate-12 translate-x-1/2 scale-150"></div>
+</div>
+<div class="px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row items-center gap-16 relative z-10">
+<div class="w-full md:w-1/2">
+<img class="w-full aspect-video object-cover border-4 border-white" data-alt="A clean, minimalist high-tech automotive franchise office featuring glass walls and modern black furniture. A professional consultant is pointing to a digital blueprint of a mechanical workshop on a large touchscreen monitor. The lighting is cool and professional, with bright white overhead bars. The brand colors of deep black and bright red are subtly integrated into the furniture accents and the digital interface on the screens." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_K0KeocTllHQxdyj0sh5xD6eVcT1mr4eT6Z18uKUclneVUd6FspITAAYv54nb7PBmaQeyRTF41uV4esfLPzSusOKSN13lZiFnTSXuiYEdJlarmvFekuBZ4rZnZm6oD8hPDSyJiPV3bvze6JllM_jMCOMQvf5urQcZTpGZjYlsMTdNWfbSyVM0LqVn5vGp9fbEZrGyWvBc4eB1QaIRRPL7ObAejlU9pETQQNMMYDEygqfdfcGchsT1N46u8Fx8g01BY96Vh0VHKddd"/>
+</div>
+<div class="w-full md:w-1/2 space-y-8">
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg uppercase leading-none">
+                        Unite a la Red<br/><span class="text-secondary italic">Escalabilidad de Carrera</span>
+</h2>
+<p class="font-body-lg text-body-lg text-plata">
+                        Liderá el mercado de la mecánica premium. Ofrecemos un modelo de negocio probado con soporte técnico constante, branding de alto impacto y tecnología de gestión propia.
+                    </p>
+<div class="grid grid-cols-2 gap-8 py-4">
+<div>
+<p class="font-headline-md text-secondary">15+</p>
+<p class="font-technical-data text-technical-data uppercase">Sucursales Activas</p>
+</div>
+<div>
+<p class="font-headline-md text-secondary">ROI</p>
+<p class="font-technical-data text-technical-data uppercase">18 Meses Est.</p>
+</div>
+</div>
+<button class="bg-white text-primary font-label-caps text-label-caps px-12 py-5 skewed-btn hover:bg-secondary hover:text-white transition-all duration-300">
+                        Información Franquicias
+                    </button>
+</div>
+</div>
+</section>
+<!-- Technical Specs Strip -->
+<div class="bg-tertiary py-6 border-t-2 border-b-2 border-secondary overflow-hidden whitespace-nowrap">
+<div class="flex animate-[scroll_30s_linear_infinite] gap-16 font-technical-data text-technical-data text-white">
+<span>// OIL_PRESSURE: 4.5 BAR</span>
+<span>// TYRE_TEMP_FL: 92°C</span>
+<span>// FUEL_MIX: OPTIMIZED</span>
+<span>// BRAKE_WEAR: 15%</span>
+<span>// ENGINE_RPM_IDLE: 850</span>
+<span>// GEARBOX_SYNC: ACTIVE</span>
+<span>// OIL_PRESSURE: 4.5 BAR</span>
+<span>// TYRE_TEMP_FL: 92°C</span>
+<span>// FUEL_MIX: OPTIMIZED</span>
+<span>// BRAKE_WEAR: 15%</span>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-section-gap px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-start bg-tertiary dark:bg-black border-t-4 border-secondary text-on-tertiary dark:text-white">
+<div class="flex flex-col gap-6 mb-12 md:mb-0">
+<div class="font-headline-lg text-headline-lg text-on-tertiary dark:text-white uppercase">
+                341 BOXES
+            </div>
+<p class="font-technical-data text-technical-data text-plata max-w-xs uppercase">
+                Estándares de competición para el conductor consciente.
+            </p>
+<div class="font-technical-data text-technical-data mt-4">
+                © 2024 341 BOXES. PRECISION ENGINEERING.
+            </div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-32">
+<div class="flex flex-col gap-4">
+<span class="font-label-caps text-label-caps text-secondary mb-2">Location</span>
+<a class="font-technical-data text-technical-data text-plata hover:text-white transition-opacity" href="#">Av Eva Peron 5500 Rosario</a>
+<div class="h-48 w-full md:w-64 bg-primary mt-4 grayscale hover:grayscale-0 transition-all">
+<img class="w-full h-full object-cover" data-alt="A stylized, high-contrast dark satellite map of an urban intersection in Rosario, Argentina. The map features stark black backgrounds with thin, glowing white lines for roads and intense red markers for the specific business location. The overall aesthetic is technical and blueprint-like, matching a high-performance engineering brand." data-location="Rosario" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4kyKtlmTyjg0lFvNZomSAxFjEotKE1nLGmmZSlykQZprxHMVWY2PSeI5eq3exHs1BZ6lavkKmal8Vp9uz5Uqx80qCYmduBgDyTEikUMJB4pADLZ_Vgmm_b5r6tg1n9oVuScQM0_L9oPW-tRVHKgwIoMMfjvTBP2LLJIplOMp9r-iNAT84kDghiKOl26yGXff4Eh0ybcc6iatZlPQZuF89CTgja88TcbG3bWIFABFH1wxfKzRNud0eQH_weH8hI08OxzoWhLGLEYpO"/>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<span class="font-label-caps text-label-caps text-secondary mb-2">Social &amp; Legal</span>
+<a class="font-technical-data text-technical-data text-plata hover:text-white transition-opacity" href="#">Instagram</a>
+<a class="font-technical-data text-technical-data text-plata hover:text-white transition-opacity" href="#">LinkedIn</a>
+<a class="font-technical-data text-technical-data text-plata hover:text-white transition-opacity" href="#">Terms of Service</a>
+<div class="mt-8 flex gap-4">
+<span class="material-symbols-outlined text-secondary" data-icon="terminal">terminal</span>
+<span class="font-technical-data text-technical-data text-plata">v2.0.4-PRODUCTION</span>
+</div>
+</div>
+</div>
+</footer>
+<style>
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+    </style>
+<script>
+        // Smooth scroll interaction
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Simple visibility observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section > div').forEach(el => {
+            el.classList.add('transition-all', 'duration-1000', 'opacity-0', 'translate-y-10');
+            observer.observe(el);
+        });
+    </script>
+</body></html>
