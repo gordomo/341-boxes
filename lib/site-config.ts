@@ -29,6 +29,14 @@ export const SITE = {
   // ⚠️ PLACEHOLDER — email de contacto
   EMAIL: "contacto@341boxes.com",
 
+  // ⚠️ PLACEHOLDER — horarios reales de atención del taller.
+  // Cada item es una fila ("días" → "horario"). Editar/agregar libremente.
+  HORARIOS: [
+    { dias: "Lunes a viernes", horas: "8:30 a 18:00" },
+    { dias: "Sábados", horas: "9:00 a 13:00" },
+    { dias: "Domingos", horas: "Cerrado" },
+  ],
+
   /** Año de copyright (editar según corresponda). */
   COPYRIGHT_YEAR: 2025,
 } as const;
@@ -42,6 +50,16 @@ export const INSTAGRAM_URL = `https://instagram.com/${SITE.INSTAGRAM}`;
 
 /** URL de WhatsApp (chat directo, sin mensaje). */
 export const WHATSAPP_URL = `https://wa.me/${SITE.WHATSAPP}`;
+
+/**
+ * Número de WhatsApp formateado para mostrar en pantalla.
+ * Se arma desde SITE.WHATSAPP (formato AR: 549 + área + número).
+ * Ej: "5493410000000" → "+54 9 341 000 0000".
+ */
+export const WHATSAPP_DISPLAY = ((n: string) =>
+  n.startsWith("549") && n.length === 13
+    ? `+54 9 ${n.slice(3, 6)} ${n.slice(6, 9)} ${n.slice(9)}`
+    : `+${n}`)(SITE.WHATSAPP);
 
 /**
  * Arma un link de WhatsApp con un mensaje pre-cargado.
