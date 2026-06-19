@@ -42,7 +42,7 @@ Cualquier cambio se hace SOLO acá y se refleja en todo el sitio.
 
 ## Placeholders pendientes a confirmar/reemplazar
 - WHATSAPP, INSTAGRAM, EMAIL, SITE_URL en site-config.ts
-- public/brand/hero-trabajo.jpg → foto de stock (Pexels), reemplazar por foto real del taller
+- public/brand/hero-portada.png → imagen del hero (usada en app/page.tsx), reemplazar por foto real del taller
 
 ## Notas
 - /pedir-turno es maqueta funcional: el flujo es real pero "confirmar" abre WhatsApp con el resumen. No hay reserva online real ni backend. Está rotulado como "Reserva online — próximamente".
