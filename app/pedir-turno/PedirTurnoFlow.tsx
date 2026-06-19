@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { SITE, waLink } from "@/lib/site-config";
+import { SITE, waLink, slotsParaDia, estaAbierto } from "@/lib/site-config";
 
 // ============================================================
 //  PEDIR TURNO — flujo de 4 pasos (cliente)
@@ -15,17 +15,26 @@ import { SITE, waLink } from "@/lib/site-config";
 
 // ---------- Datos del flujo ----------
 
+// Alineado con los 6 servicios reales de la landing + "Service
+// completo" (especial) + "Otro". El id "service-completo" tiene una
+// regla aparte (ver toggleServicio).
+const SERVICIO_COMPLETO = "service-completo";
+
 const SERVICIOS = [
-  { id: "service-aceite", icon: "oil_barrel", titulo: "Service / aceite" },
-  { id: "frenos", icon: "album", titulo: "Frenos y suspensión" },
-  { id: "diagnostico", icon: "speed", titulo: "Diagnóstico / scanner" },
-  { id: "bateria", icon: "battery_charging_full", titulo: "Batería y eléctrico" },
-  { id: "neumaticos", icon: "tire_repair", titulo: "Neumáticos y alineación" },
+  {
+    id: SERVICIO_COMPLETO,
+    icon: "build_circle",
+    titulo: "Service completo",
+    nota: "Incluye todo el mantenimiento",
+  },
+  { id: "inyeccion", icon: "local_gas_station", titulo: "Inyección" },
+  { id: "lubricantes", icon: "oil_barrel", titulo: "Lubricantes (aceite)" },
+  { id: "baterias", icon: "battery_charging_full", titulo: "Baterías" },
+  { id: "frenos", icon: "album", titulo: "Frenos" },
+  { id: "refrigeracion", icon: "thermostat", titulo: "Refrigeración" },
+  { id: "tren-delantero", icon: "tire_repair", titulo: "Tren delantero" },
   { id: "otro", icon: "build", titulo: "Otro" },
 ] as const;
-
-// Horarios de la vista previa (sólo demostrativos).
-const HORARIOS = ["09:00", "10:30", "14:00", "16:00"] as const;
 
 const PASOS = [
   { n: 1, label: "Servicio" },
@@ -69,7 +78,7 @@ export default function PedirTurnoFlow() {
   const [paso, setPaso] = useState(1);
 
   // Selecciones del flujo.
-  const [servicio, setServicio] = useState<string | null>(null);
+  const [servicios, setServicios] = useState<string[]>([]); // multi-select
   const [fecha, setFecha] = useState<Date | null>(null);
   const [hora, setHora] = useState<string | null>(null);
 
@@ -89,11 +98,35 @@ export default function PedirTurnoFlow() {
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
       setForm((f) => ({ ...f, [campo]: e.target.value }));
 
-  const servicioElegido = SERVICIOS.find((s) => s.id === servicio);
+  // ---------- Selección de servicios (con regla "Service completo") ----------
+  const serviceCompletoSel = servicios.includes(SERVICIO_COMPLETO);
+
+  function toggleServicio(id: string) {
+    if (id === SERVICIO_COMPLETO) {
+      // Tildar "Service completo" deja solo eso; destildarlo limpia todo.
+      setServicios((prev) => (prev.includes(SERVICIO_COMPLETO) ? [] : [SERVICIO_COMPLETO]));
+      return;
+    }
+    // El resto sólo se puede tocar si "Service completo" NO está tildado
+    // (sus tarjetas quedan deshabilitadas, pero reforzamos por las dudas).
+    if (serviceCompletoSel) return;
+    setServicios((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
+    );
+  }
+
+  // Títulos de lo elegido, en el orden canónico de SERVICIOS.
+  const serviciosTitulos = SERVICIOS.filter((s) => servicios.includes(s.id)).map(
+    (s) => s.titulo,
+  );
+  const serviciosTexto = serviciosTitulos.join(", ");
+
+  // Slots de horario disponibles para el día elegido (auto desde site-config).
+  const slots = fecha ? slotsParaDia(fecha) : [];
 
   // ---------- Validación mínima por paso ----------
   const puedeAvanzar =
-    (paso === 1 && !!servicio) ||
+    (paso === 1 && servicios.length >= 1) ||
     (paso === 2 && !!fecha && !!hora) ||
     (paso === 3 &&
       form.nombre.trim() !== "" &&
@@ -120,7 +153,7 @@ export default function PedirTurnoFlow() {
   // ---------- Mensaje de WhatsApp (arma TODO lo elegido) ----------
   const mensajeWhatsApp = [
     `Hola ${SITE.NOMBRE} 👋 Quiero pedir un turno.`,
-    `Servicio: ${servicioElegido?.titulo ?? "-"}`,
+    `Servicios: ${serviciosTexto || "-"}`,
     `Día/hora tentativos: ${fechaHoraTexto}`,
     `Auto: ${form.vehiculo || "-"}`,
     `Nombre: ${form.nombre || "-"}`,
@@ -184,47 +217,64 @@ export default function PedirTurnoFlow() {
       </ol>
 
       {/* ============================================================
-          PASO 1 — SERVICIO
+          PASO 1 — SERVICIO (multi-select)
           ============================================================ */}
       {paso === 1 && (
         <section>
-          <h2 className="font-headline-md text-headline-md text-primary uppercase border-l-4 border-secondary pl-4 mb-8">
+          <h2 className="font-headline-md text-headline-md text-primary uppercase border-l-4 border-secondary pl-4 mb-2">
             ¿Qué necesita tu auto?
           </h2>
+          <p className="font-body-md text-body-md text-on-surface-variant mb-8 pl-5">
+            Podés elegir varios servicios.
+          </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter">
             {SERVICIOS.map((s) => {
-              const elegido = servicio === s.id;
+              const elegido = servicios.includes(s.id);
+              const deshabilitado = serviceCompletoSel && s.id !== SERVICIO_COMPLETO;
               return (
                 <button
                   key={s.id}
                   type="button"
-                  onClick={() => setServicio(s.id)}
+                  onClick={() => toggleServicio(s.id)}
+                  disabled={deshabilitado}
                   aria-pressed={elegido}
                   className={`group text-left border-2 p-6 transition-all bg-white ${
                     elegido
                       ? "border-secondary"
                       : "border-primary hover:-translate-y-1"
+                  } ${
+                    deshabilitado
+                      ? "opacity-40 cursor-not-allowed hover:translate-y-0"
+                      : ""
                   }`}
                 >
                   <div className="flex justify-between items-start mb-10">
                     <span
+                      aria-hidden="true"
                       className={`material-symbols-outlined text-4xl ${
                         elegido ? "text-secondary" : "text-primary"
                       }`}
                     >
                       {s.icon}
                     </span>
+                    {/* Indicador tipo checkbox */}
                     <span
+                      aria-hidden="true"
                       className={`material-symbols-outlined text-2xl transition-opacity ${
-                        elegido ? "text-secondary opacity-100" : "opacity-0"
+                        elegido ? "text-secondary opacity-100" : "opacity-25"
                       }`}
                     >
-                      check_circle
+                      {elegido ? "check_box" : "check_box_outline_blank"}
                     </span>
                   </div>
                   <h3 className="font-headline-md text-headline-md text-primary uppercase leading-tight">
                     {s.titulo}
                   </h3>
+                  {"nota" in s && s.nota && (
+                    <p className="font-technical-data text-[11px] text-on-surface-variant uppercase tracking-widest mt-2">
+                      {s.nota}
+                    </p>
+                  )}
                 </button>
               );
             })}
@@ -242,7 +292,7 @@ export default function PedirTurnoFlow() {
               Elegí día y hora
             </h2>
             <span className="inline-flex items-center gap-2 font-technical-data text-[11px] uppercase tracking-widest text-secondary border border-secondary/50 px-3 py-1">
-              <span className="material-symbols-outlined text-base">visibility</span>
+              <span className="material-symbols-outlined text-base" aria-hidden="true">visibility</span>
               Vista previa — coordinamos el horario final por WhatsApp
             </span>
           </div>
@@ -291,6 +341,8 @@ export default function PedirTurnoFlow() {
                   const dia = i + 1;
                   const fechaCelda = new Date(vista.y, vista.m, dia);
                   const pasado = fechaCelda < hoy0;
+                  const cerrado = !estaAbierto(fechaCelda);
+                  const deshabilitado = pasado || cerrado;
                   const seleccionado =
                     fecha &&
                     fecha.getFullYear() === vista.y &&
@@ -301,13 +353,19 @@ export default function PedirTurnoFlow() {
                     <button
                       key={dia}
                       type="button"
-                      disabled={pasado}
-                      onClick={() => setFecha(fechaCelda)}
+                      disabled={deshabilitado}
+                      title={
+                        cerrado && !pasado ? "Cerrado" : undefined
+                      }
+                      onClick={() => {
+                        setFecha(fechaCelda);
+                        setHora(null); // los slots dependen del día elegido
+                      }}
                       className={`aspect-square flex items-center justify-center border transition-colors ${
                         seleccionado
                           ? "bg-secondary text-white border-secondary"
-                          : pasado
-                            ? "border-surface-container text-on-surface-variant/30 cursor-not-allowed"
+                          : deshabilitado
+                            ? "border-surface-container text-on-surface-variant/30 cursor-not-allowed line-through decoration-1"
                             : "border-primary text-primary hover:bg-primary hover:text-on-primary"
                       }`}
                     >
@@ -316,33 +374,48 @@ export default function PedirTurnoFlow() {
                   );
                 })}
               </div>
+
+              <p className="font-technical-data text-[11px] text-on-surface-variant mt-4">
+                Los días cerrados aparecen tachados y no se pueden elegir.
+              </p>
             </div>
 
-            {/* Horarios */}
+            {/* Horarios (slots generados automáticamente desde site-config) */}
             <div className="lg:col-span-5 flex flex-col gap-4">
               <div className="bg-carbon text-white p-6 flex-1">
                 <p className="font-technical-data text-technical-data text-plata mb-4 uppercase">
-                  Horarios (vista previa)
+                  {fecha ? `Horarios — ${formatFecha(fecha)}` : "Horarios"}
                 </p>
-                <div className="grid grid-cols-2 gap-2">
-                  {HORARIOS.map((h) => {
-                    const elegido = hora === h;
-                    return (
-                      <button
-                        key={h}
-                        type="button"
-                        onClick={() => setHora(h)}
-                        className={`py-3 font-technical-data border transition-colors ${
-                          elegido
-                            ? "bg-secondary border-secondary text-white"
-                            : "border-asfalto text-white hover:border-secondary"
-                        }`}
-                      >
-                        {h}
-                      </button>
-                    );
-                  })}
-                </div>
+
+                {!fecha ? (
+                  <p className="font-technical-data text-technical-data text-plata/70">
+                    Elegí un día para ver los horarios disponibles.
+                  </p>
+                ) : slots.length === 0 ? (
+                  <p className="font-technical-data text-technical-data text-plata/70">
+                    Ese día no hay horarios disponibles.
+                  </p>
+                ) : (
+                  <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-3 gap-2">
+                    {slots.map((h) => {
+                      const elegido = hora === h;
+                      return (
+                        <button
+                          key={h}
+                          type="button"
+                          onClick={() => setHora(h)}
+                          className={`py-2.5 font-technical-data text-technical-data border transition-colors ${
+                            elegido
+                              ? "bg-secondary border-secondary text-white"
+                              : "border-asfalto text-white hover:border-secondary"
+                          }`}
+                        >
+                          {h}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
               <p className="font-technical-data text-[11px] text-on-surface-variant">
                 * Día y hora son tentativos. El turno se confirma por WhatsApp.
@@ -438,8 +511,25 @@ export default function PedirTurnoFlow() {
             </div>
 
             <dl className="space-y-6">
+              {/* Servicios: lista si hay varios, texto si es uno */}
+              <div className="flex flex-col gap-1 border-b border-plata/40 pb-4">
+                <dt className="font-technical-data text-[10px] text-on-surface-variant uppercase tracking-widest">
+                  {serviciosTitulos.length > 1 ? "Servicios" : "Servicio"}
+                </dt>
+                <dd className="font-body-lg font-bold text-primary">
+                  {serviciosTitulos.length > 1 ? (
+                    <ul className="list-disc list-inside space-y-0.5">
+                      {serviciosTitulos.map((t) => (
+                        <li key={t}>{t}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    serviciosTitulos[0] ?? "-"
+                  )}
+                </dd>
+              </div>
+
               {[
-                { label: "Servicio", valor: servicioElegido?.titulo ?? "-" },
                 { label: "Día / hora tentativos", valor: fechaHoraTexto },
                 { label: "Auto", valor: form.vehiculo || "-" },
                 { label: "Nombre", valor: form.nombre || "-" },
@@ -470,7 +560,7 @@ export default function PedirTurnoFlow() {
             className="w-full bg-secondary text-white font-label-caps text-label-caps py-6 uppercase skew-button hover:bg-primary transition-colors flex justify-center items-center gap-4"
           >
             Confirmar por WhatsApp
-            <span className="material-symbols-outlined">chat</span>
+            <span className="material-symbols-outlined" aria-hidden="true">chat</span>
           </a>
           <p className="font-technical-data text-technical-data text-on-surface-variant mt-4 text-center">
             Te vamos a confirmar el turno por WhatsApp.

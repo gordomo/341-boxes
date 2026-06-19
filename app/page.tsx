@@ -1,252 +1,525 @@
 import Link from "next/link";
-import { WHATSAPP_TURNO_URL } from "@/lib/site-config";
+import Image from "next/image";
+import {
+  SITE,
+  waLink,
+  WHATSAPP_TURNO_URL,
+  WHATSAPP_URL,
+  WHATSAPP_DISPLAY,
+  TEL_URL,
+  TEL_DISPLAY,
+  EMAIL_URL,
+  MAPS_URL,
+  INSTAGRAM_URL,
+  HORARIOS_ROWS,
+  SITE_TITLE_DEFAULT,
+  SITE_DESCRIPTION,
+  pageMetadata,
+} from "@/lib/site-config";
+import ContactoForm from "./components/ContactoForm";
+
+export const metadata = pageMetadata({
+  title: SITE_TITLE_DEFAULT,
+  description: SITE_DESCRIPTION,
+  path: "/",
+  absoluteTitle: true,
+});
 
 // ============================================================
-//  IMAGEN DEL HERO
+//  IMÁGENES DEL HERO
 //  ------------------------------------------------------------
-//  Placeholder local en /public. Para usar la foto real:
-//  reemplazá el archivo "public/hero-taller.jpg" por la tuya
-//  (misma ruta y nombre) o cambiá esta constante por otra ruta.
-//  Recomendado: foto oscura y de alto contraste (taller / box).
+//  - Logo oficial con fondo transparente (elemento gráfico).
+//  - Imagen de portada: ilustración tipo "corte transversal" de un
+//    sedán mostrando su mecánica interna, sobre fondo blanco con
+//    cinta a cuadros (provista por la marca).
 // ============================================================
-const HERO_IMAGE = "/hero-taller.jpg";
+const LOGO_TRANSPARENTE = "/brand/logo-transparente.png";
+const HERO_PORTADA = "/brand/hero-portada.png";
 
-// Pilares de la sección "Por qué elegirnos"
-const PILARES = [
+// 2) POR QUÉ ELEGIRNOS — 4 valores de marca
+const VALORES = [
   {
-    icon: "speed",
-    titulo: "Diagnóstico honesto",
+    icon: "precision_manufacturing",
+    titulo: "Precisión",
     texto:
-      "Te explicamos qué tiene tu auto, por qué, y qué conviene hacer primero. Sin vueltas ni trabajos que no necesitás.",
+      "Cada trabajo, hecho con método. Diagnosticamos antes de tocar y trabajamos con la prolijidad que tu auto necesita.",
   },
   {
-    icon: "request_quote",
-    titulo: "Presupuesto antes de tocar nada",
+    icon: "balance",
+    titulo: "Criterio",
     texto:
-      "Sabés cuánto vas a pagar antes de que empecemos. Sin sorpresas al final.",
+      "Te decimos qué conviene hacer y qué puede esperar. No vendemos trabajos que no necesitás.",
   },
   {
-    icon: "build",
-    titulo: "Tu auto, cuidado como propio",
+    icon: "visibility",
+    titulo: "Transparencia",
     texto:
-      "Cada vehículo se trata con método y respeto. Te lo devolvemos andando como tiene que andar.",
+      "Te mostramos. Te cotizamos. Vos decidís. Sin sorpresas al final.",
+  },
+  {
+    icon: "verified",
+    titulo: "Garantía",
+    texto: "Trabajo escrito. Si algo no quedó bien, lo resolvemos.",
   },
 ];
 
-// Tarjetas destacadas de "Lo que hacemos"
-const SERVICIOS = [
-  { icon: "oil_barrel", titulo: "Aceite y filtros" },
-  { icon: "album", titulo: "Frenos" },
-  { icon: "speed", titulo: "Diagnóstico" },
-  { icon: "tire_repair", titulo: "Neumáticos y alineación" },
+// 3) SERVICIOS — los 6 reales
+type Servicio = {
+  id: string;
+  icon: string;
+  titulo: string;
+  descripcion: string;
+  dato: { label: string; valor: string };
+};
+
+const SERVICIOS: Servicio[] = [
+  {
+    id: "01",
+    icon: "local_gas_station",
+    titulo: "Inyección",
+    descripcion:
+      "Limpieza y diagnóstico del sistema de inyección. Mejor rendimiento y menos consumo.",
+    dato: { label: "Resultado", valor: "Menos consumo" },
+  },
+  {
+    id: "02",
+    icon: "oil_barrel",
+    titulo: "Lubricantes",
+    descripcion:
+      "Cambio de aceite y filtros con productos de calidad, según lo que pide tu vehículo.",
+    dato: { label: "Tiempo estimado", valor: "~30 min" },
+  },
+  {
+    id: "03",
+    icon: "battery_charging_full",
+    titulo: "Baterías",
+    descripcion:
+      "Chequeo de batería, alternador y carga. Reemplazo si hace falta.",
+    dato: { label: "Chequeo", valor: "Sin cargo" },
+  },
+  {
+    id: "04",
+    icon: "album",
+    titulo: "Frenos",
+    descripcion:
+      "Pastillas, discos y líquido de freno. Tu auto frena como debe.",
+    dato: { label: "Tiempo estimado", valor: "~45 min" },
+  },
+  {
+    id: "05",
+    icon: "thermostat",
+    titulo: "Refrigeración",
+    descripcion:
+      "Radiador, bomba de agua, líquidos. Evitamos que el motor recaliente.",
+    dato: { label: "Alcance", valor: "Revisión completa" },
+  },
+  {
+    id: "06",
+    icon: "tire_repair",
+    titulo: "Tren delantero",
+    descripcion:
+      "Alineación, balanceo y suspensión. Manejo seguro y cubiertas que duran.",
+    dato: { label: "Incluye", valor: "Alineación + balanceo" },
+  },
 ];
 
-// Frase de la franja animada (marquee). Se repite sola.
-const MARQUEE =
-  "341 BOXES · MECÁNICA INTEGRAL · ROSARIO · TRABAJO CLARO · AUTO CONFIABLE · ";
+// 6) CONTACTO — bloque de datos
+const MAPA_EMBED = `https://www.google.com/maps?q=${encodeURIComponent(
+  SITE.DIRECCION,
+)}&output=embed`;
+
+const CONTACTOS = [
+  { icon: "location_on", label: "Dirección", valor: SITE.DIRECCION, href: MAPS_URL, externo: true },
+  { icon: "call", label: "Teléfono", valor: TEL_DISPLAY, href: TEL_URL, externo: false },
+  { icon: "chat", label: "WhatsApp", valor: WHATSAPP_DISPLAY, href: WHATSAPP_URL, externo: true },
+  { icon: "mail", label: "Email", valor: SITE.EMAIL, href: EMAIL_URL, externo: false },
+  { icon: "photo_camera", label: "Instagram", valor: `@${SITE.INSTAGRAM}`, href: INSTAGRAM_URL, externo: true },
+];
+
+// ============================================================
+//  Cinta a cuadros (línea de meta) — divisor de marca.
+// ============================================================
+function CintaCuadros() {
+  return <div aria-hidden className="checkered h-4 w-full" />;
+}
 
 export default function Home() {
   return (
     <>
       {/* ============================================================
-          1) HERO
+          1) HERO — fondo blanco. Logo transparente + texto a la
+             izquierda; foto de trabajo del taller a la derecha.
           ============================================================ */}
-      <section className="relative flex min-h-[calc(100vh-72px)] items-center overflow-hidden bg-primary">
-        {/* Foto de fondo + overlay oscuro */}
-        <div className="absolute inset-0 z-0">
-          <div
-            className="h-full w-full bg-cover bg-center"
-            style={{ backgroundImage: `url('${HERO_IMAGE}')` }}
-          />
-          <div className="absolute inset-0 bg-primary/70" />
-        </div>
+      <section className="relative overflow-hidden bg-white">
+        {/* Acento diagonal rojo sutil (la raya entre 341 y BOXES) */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -top-10 right-1/2 h-[140%] w-3 bg-secondary/70 rotate-[18deg] hidden lg:block"
+        />
+        <div className="relative z-10 px-margin-mobile md:px-margin-desktop py-16 md:py-24">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+            {/* Texto + logo */}
+            <div className="space-y-6">
+              <Image
+                src={LOGO_TRANSPARENTE}
+                alt={SITE.NOMBRE}
+                width={273}
+                height={66}
+                priority
+                className="w-60 md:w-80 h-auto"
+              />
+              <p className="font-technical-data text-technical-data text-secondary uppercase tracking-[0.3em]">
+                Servicio mecánico
+              </p>
+              <h1 className="font-display-hero text-[2.5rem] leading-[1.02] md:text-[3.5rem] lg:text-[4rem] text-primary uppercase">
+                El trato que tu <span className="text-secondary">auto</span> se
+                merece
+              </h1>
+              <p className="font-body-lg text-body-lg text-asfalto max-w-xl">
+                Mecánica integral en Rosario. Inyección, frenos, baterías,
+                refrigeración, lubricantes y tren delantero, hechos con criterio
+                y transparencia.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 pt-2">
+                <a
+                  href={WHATSAPP_TURNO_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-secondary text-white font-label-caps text-label-caps px-8 py-5 skew-button text-center hover:bg-primary transition-colors duration-300 inline-flex items-center justify-center gap-3"
+                >
+                  <span className="material-symbols-outlined text-xl" aria-hidden="true">chat</span>
+                  Pedir turno por WhatsApp
+                </a>
+                <a
+                  href="#servicios"
+                  className="border-2 border-primary text-primary font-label-caps text-label-caps px-8 py-5 text-center hover:bg-primary hover:text-white transition-colors duration-300"
+                >
+                  Ver servicios
+                </a>
+              </div>
+            </div>
 
-        <div className="relative z-10 w-full px-margin-mobile md:px-margin-desktop py-section-gap">
-          <div className="max-w-4xl space-y-6">
-            <p className="font-technical-data text-technical-data text-secondary uppercase tracking-[0.3em]">
-              Precisión que se siente
-            </p>
-            <h1 className="font-display-hero text-headline-lg-mobile md:text-display-hero text-on-primary leading-tight">
-              341 BOXES — MECÁNICA DE PODIO
-            </h1>
-            <p className="font-body-lg text-body-lg text-plata max-w-2xl">
-              Llevamos el orden y la precisión del automovilismo a la mecánica
-              de todos los días. Trabajo claro, autos confiables.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <a
-                href={WHATSAPP_TURNO_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-secondary text-white font-label-caps text-label-caps px-10 py-5 skew-button text-center hover:bg-white hover:text-primary transition-all duration-300"
-              >
-                Pedir Turno
-              </a>
-              <Link
-                href="/servicios"
-                className="border-2 border-white text-white font-label-caps text-label-caps px-10 py-5 text-center hover:bg-white hover:text-primary transition-all duration-300"
-              >
-                Ver Servicios
-              </Link>
+            {/* Foto de trabajo del taller */}
+            <div className="relative">
+              {/* Marco con esquinas rojas (detalle técnico) */}
+              <div className="absolute -top-3 -left-3 w-10 h-10 border-t-4 border-l-4 border-secondary z-10" />
+              <div className="absolute -bottom-3 -right-3 w-10 h-10 border-b-4 border-r-4 border-secondary z-10" />
+              <div className="relative aspect-[40/21] w-full border-2 border-primary overflow-hidden bg-white">
+                <Image
+                  src={HERO_PORTADA}
+                  alt="Corte transversal de un sedán mostrando su mecánica interna"
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-contain"
+                />
+              </div>
             </div>
           </div>
         </div>
       </section>
 
+      <CintaCuadros />
+
       {/* ============================================================
-          2) POR QUÉ ELEGIRNOS
+          2) POR QUÉ ELEGIRNOS — 4 valores (fondo blanco)
           ============================================================ */}
-      <section className="bg-surface px-margin-mobile md:px-margin-desktop py-section-gap">
+      <section className="bg-white px-margin-mobile md:px-margin-desktop py-section-gap">
         <div className="mb-16">
-          <h2 className="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary uppercase">
+          <span className="block font-label-caps text-label-caps text-secondary mb-4">
             Por qué elegirnos
+          </span>
+          <h2 className="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary uppercase">
+            Cuatro razones, sin vueltas
           </h2>
           <div className="h-1 w-24 bg-secondary mt-4" />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
-          {PILARES.map((p) => (
-            <div
-              key={p.titulo}
-              className="service-card border border-primary bg-white p-8 flex flex-col h-full"
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+          {VALORES.map((v) => (
+            <article
+              key={v.titulo}
+              className="service-card bg-white border border-primary technical-border p-8 flex flex-col h-full"
             >
-              <span className="material-symbols-outlined text-secondary text-5xl mb-6">
-                {p.icon}
+              <span className="material-symbols-outlined text-secondary text-5xl mb-6" aria-hidden="true">
+                {v.icon}
               </span>
-              <h3 className="font-headline-md text-headline-md text-primary uppercase">
-                {p.titulo}
+              <h3 className="font-headline-md text-headline-md text-primary uppercase mb-4">
+                {v.titulo}
               </h3>
-              <p className="font-body-md text-body-md text-asfalto mt-4">
-                {p.texto}
-              </p>
-            </div>
+              <p className="font-body-md text-body-md text-asfalto">{v.texto}</p>
+            </article>
           ))}
         </div>
       </section>
 
       {/* ============================================================
-          3) LO QUE HACEMOS
+          3) SERVICIOS (#servicios) — los 6 reales (fondo blanco)
           ============================================================ */}
-      <section className="bg-surface f1-grid px-margin-mobile md:px-margin-desktop py-section-gap">
+      <section
+        id="servicios"
+        className="bg-white f1-grid px-margin-mobile md:px-margin-desktop py-section-gap"
+      >
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-16">
           <div>
+            <span className="block font-label-caps text-label-caps text-secondary mb-4">
+              Mecánica integral
+            </span>
             <h2 className="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary uppercase">
-              Lo que hacemos
+              Nuestros boxes
             </h2>
             <div className="h-1 w-24 bg-secondary mt-4" />
           </div>
           <p className="font-body-md text-body-md text-asfalto max-w-md">
-            Mantenimiento y reparación de mecánica básica e intermedia, con la
-            prolijidad de un equipo profesional.
+            Mantenimiento y reparación con la prolijidad de un equipo
+            profesional. Tiempos claros y repuestos de calidad.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
           {SERVICIOS.map((s) => (
-            <div
-              key={s.titulo}
-              className="group service-card border border-primary bg-white p-unit hover:bg-primary transition-colors duration-300"
+            <article
+              key={s.id}
+              className="service-card bg-white border border-primary technical-border p-8 flex flex-col h-full"
             >
-              <div className="border border-plata group-hover:border-secondary p-8 flex flex-col h-full transition-colors duration-300">
-                <span className="material-symbols-outlined text-secondary text-5xl mb-6">
+              <div className="flex justify-between items-start mb-6">
+                <span className="material-symbols-outlined text-4xl text-secondary" aria-hidden="true">
                   {s.icon}
                 </span>
-                <h3 className="font-headline-md text-headline-md text-primary group-hover:text-white uppercase transition-colors duration-300">
-                  {s.titulo}
-                </h3>
+                <span className="font-technical-data text-technical-data text-on-surface-variant bg-plata/20 px-2 py-1">
+                  BOX_{s.id}
+                </span>
               </div>
-            </div>
+
+              <h3 className="font-headline-md text-headline-md text-primary uppercase mb-4">
+                {s.titulo}
+              </h3>
+              <p className="font-body-md text-body-md text-on-surface-variant mb-8 flex-grow">
+                {s.descripcion}
+              </p>
+
+              <div className="pt-6 border-t border-plata/40 flex justify-between items-end gap-4">
+                <div className="flex flex-col">
+                  <span className="font-technical-data text-[10px] text-on-surface-variant uppercase tracking-widest">
+                    {s.dato.label}
+                  </span>
+                  <span className="font-technical-data text-technical-data font-bold text-primary uppercase">
+                    {s.dato.valor}
+                  </span>
+                </div>
+                <a
+                  href={waLink(
+                    `Hola ${SITE.NOMBRE}, quiero consultar por el servicio: ${s.titulo}.`,
+                  )}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="shrink-0 bg-primary text-on-primary px-5 py-2 uppercase font-label-caps text-xs skew-button hover:bg-secondary transition-colors"
+                >
+                  Consultar
+                </a>
+              </div>
+            </article>
           ))}
         </div>
+      </section>
 
-        <div className="mt-12">
-          <Link
-            href="/servicios"
-            className="inline-flex items-center gap-2 font-label-caps text-label-caps text-secondary uppercase border-b-2 border-secondary pb-1 hover:gap-3 transition-all"
-          >
-            Ver todos los servicios
-            <span className="material-symbols-outlined text-xl">
-              arrow_forward
+      <CintaCuadros />
+
+      {/* ============================================================
+          4) NOSOTROS (#nosotros) — fondo blanco
+          ============================================================ */}
+      <section
+        id="nosotros"
+        className="bg-white px-margin-mobile md:px-margin-desktop py-section-gap"
+      >
+        <div className="max-w-3xl mx-auto space-y-8">
+          <div>
+            <span className="block font-label-caps text-label-caps text-secondary mb-4">
+              El taller
             </span>
+            <h2 className="font-display-hero text-headline-lg-mobile md:text-headline-lg text-primary uppercase leading-none">
+              Cuidar tu auto es nuestra misión
+            </h2>
+          </div>
+
+          <p className="font-body-lg text-body-lg text-on-surface-variant">
+            En {SITE.NOMBRE} creemos que llevar el auto al taller no tiene por
+            qué ser un dolor de cabeza. Por eso trabajamos distinto: cada
+            vehículo se diagnostica con método, se presupuesta antes de empezar
+            y se repara con repuestos de calidad.
+          </p>
+          <p className="font-body-lg text-body-lg text-on-surface-variant">
+            Somos un taller familiar de Rosario. Atendemos autos fuera de
+            garantía que siguen mereciendo un estándar de servicio oficial:
+            trabajo documentado, tiempos claros y respeto por vos y por tu auto.
+          </p>
+
+          {/* Frase destacada */}
+          <blockquote className="border-l-4 border-secondary pl-6 py-2">
+            <p className="font-headline-md text-headline-md md:text-headline-lg text-primary uppercase leading-tight">
+              No prometemos de más.{" "}
+              <span className="text-secondary">
+                Prometemos hacer las cosas bien.
+              </span>
+            </p>
+          </blockquote>
+        </div>
+      </section>
+
+      <CintaCuadros />
+
+      {/* ============================================================
+          5) CONTACTO (#contacto) — fondo blanco
+          ============================================================ */}
+      <section
+        id="contacto"
+        className="bg-white px-margin-mobile md:px-margin-desktop py-section-gap"
+      >
+        <div className="mb-16">
+          <span className="block font-label-caps text-label-caps text-secondary mb-4">
+            Estamos cerca
+          </span>
+          <h2 className="font-display-hero text-headline-lg-mobile md:text-display-hero text-primary uppercase leading-none">
+            Contacto
+          </h2>
+          <p className="font-body-lg text-body-lg text-asfalto max-w-2xl border-l-4 border-secondary pl-6 mt-6">
+            Escribinos, pedí tu turno o pasá por el taller. Te respondemos
+            rápido.
+          </p>
+        </div>
+
+        {/* Datos + horarios */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter mb-section-gap">
+          <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-gutter">
+            {CONTACTOS.map((c) => (
+              <Link
+                key={c.label}
+                href={c.href}
+                target={c.externo ? "_blank" : undefined}
+                rel={c.externo ? "noopener noreferrer" : undefined}
+                className="group bg-white border border-primary technical-border p-6 flex flex-col gap-4 hover:bg-primary hover:text-on-primary transition-colors"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="material-symbols-outlined text-3xl text-secondary" aria-hidden="true">
+                    {c.icon}
+                  </span>
+                  <span
+                    className="material-symbols-outlined text-base opacity-40 group-hover:opacity-100 transition-opacity"
+                    aria-hidden="true"
+                  >
+                    arrow_outward
+                  </span>
+                </div>
+                <div>
+                  <span className="block font-technical-data text-[10px] uppercase tracking-widest text-on-surface-variant group-hover:text-plata">
+                    {c.label}
+                  </span>
+                  <span className="font-body-lg font-bold break-words">
+                    {c.valor}
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          {/* Horarios (panel oscuro contenido, para contraste) */}
+          <div className="lg:col-span-5 bg-carbon text-on-primary p-8 flex flex-col">
+            <div className="flex items-center gap-3 mb-8">
+              <span className="material-symbols-outlined text-3xl text-secondary" aria-hidden="true">
+                schedule
+              </span>
+              <h3 className="font-headline-md text-headline-md uppercase">
+                Horarios
+              </h3>
+            </div>
+            <dl className="space-y-4">
+              {HORARIOS_ROWS.map((h) => (
+                <div
+                  key={h.dias}
+                  className="flex justify-between items-baseline gap-4 border-b border-outline/40 pb-4 last:border-0 last:pb-0"
+                >
+                  <dt className="font-technical-data text-technical-data text-plata uppercase">
+                    {h.dias}
+                  </dt>
+                  <dd className="font-technical-data text-technical-data text-white uppercase text-right">
+                    {h.horas}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </div>
+
+        {/* CTA WhatsApp — fondo blanco, botón rojo grande + detalle de cuadros */}
+        <div className="relative border-2 border-primary overflow-hidden mb-section-gap">
+          <div className="checkered h-3 w-full" aria-hidden />
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8 p-8 md:p-12">
+            <div className="max-w-xl">
+              <h3 className="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary uppercase leading-tight mb-4">
+                ¿Lo resolvemos por WhatsApp?
+              </h3>
+              <p className="font-body-lg text-body-lg text-asfalto">
+                Contanos qué le pasa a tu auto y coordinamos un turno.
+              </p>
+            </div>
+            <a
+              href={WHATSAPP_TURNO_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="shrink-0 bg-secondary text-white font-label-caps text-label-caps px-10 py-5 uppercase skew-button hover:bg-primary transition-colors inline-flex items-center justify-center gap-4"
+            >
+              Escribinos por WhatsApp
+              <span className="material-symbols-outlined" aria-hidden="true">chat</span>
+            </a>
+          </div>
+        </div>
+
+        {/* Formulario de contacto */}
+        <div className="max-w-3xl mx-auto border-2 border-primary p-margin-mobile md:p-16 mb-section-gap">
+          <div className="mb-12">
+            <span className="block font-label-caps text-label-caps text-secondary mb-4">
+              Escribinos
+            </span>
+            <h3 className="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary uppercase">
+              Dejanos tu consulta
+            </h3>
+          </div>
+          <ContactoForm />
+        </div>
+
+        {/* Mapa */}
+        <div className="relative border-2 border-primary">
+          <iframe
+            title={`Ubicación de ${SITE.NOMBRE} en el mapa`}
+            src={MAPA_EMBED}
+            className="w-full h-[360px] md:h-[480px] grayscale border-0 block"
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            allowFullScreen
+          />
+          <Link
+            href={MAPS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="absolute bottom-4 right-4 bg-secondary text-white font-label-caps text-label-caps px-6 py-3 uppercase skew-button hover:bg-primary transition-colors inline-flex items-center gap-2"
+          >
+            Ver en Google Maps
+            <span className="material-symbols-outlined text-base" aria-hidden="true">map</span>
           </Link>
         </div>
       </section>
 
-      {/* ============================================================
-          4) TEASER FRANQUICIAS
-          ============================================================ */}
-      <section className="relative overflow-hidden bg-primary text-white py-section-gap">
-        {/* Acento diagonal rojo de fondo */}
-        <div className="absolute inset-0 opacity-20 pointer-events-none">
-          <div className="h-full w-full diagonal-divider bg-secondary -rotate-12 translate-x-1/2 scale-150" />
-        </div>
-
-        <div className="relative z-10 px-margin-mobile md:px-margin-desktop">
-          <div className="max-w-3xl space-y-8">
-            <p className="font-technical-data text-technical-data text-secondary uppercase tracking-[0.3em]">
-              Oportunidad de inversión
-            </p>
-            <h2 className="font-headline-lg text-headline-lg-mobile md:text-headline-lg uppercase leading-none">
-              Sumá tu propio box
-            </h2>
-            <p className="font-body-lg text-body-lg text-plata">
-              341 Boxes es un modelo de taller pensado para crecer. Si querés
-              invertir en un negocio probado, con marca, método y
-              acompañamiento, hablemos.
-            </p>
-
-            <div className="grid grid-cols-2 gap-8 max-w-md py-2">
-              <div>
-                <p className="font-headline-md text-headline-md text-secondary uppercase">
-                  Modelo probado
-                </p>
-                <div className="h-0.5 w-12 bg-secondary mt-3" />
-              </div>
-              <div>
-                <p className="font-headline-md text-headline-md text-secondary uppercase">
-                  Acompañamiento real
-                </p>
-                <div className="h-0.5 w-12 bg-secondary mt-3" />
-              </div>
-            </div>
-
-            <Link
-              href="/franquicias"
-              className="inline-block bg-white text-primary font-label-caps text-label-caps px-12 py-5 skew-button hover:bg-secondary hover:text-white transition-all duration-300"
-            >
-              Conocer el modelo
-            </Link>
-          </div>
-        </div>
-      </section>
+      <CintaCuadros />
 
       {/* ============================================================
-          5) FRANJA ANIMADA (marquee)
+          6) CTA FINAL — fondo blanco, botón rojo
           ============================================================ */}
-      <div className="bg-tertiary py-6 border-y-2 border-secondary overflow-hidden">
-        <div className="animate-marquee whitespace-nowrap">
-          {/* Dos copias para que el loop sea continuo (translateX -50%) */}
-          <span className="font-label-caps text-label-caps text-white px-4">
-            {MARQUEE.repeat(4)}
-          </span>
-          <span
-            className="font-label-caps text-label-caps text-white px-4"
-            aria-hidden="true"
-          >
-            {MARQUEE.repeat(4)}
-          </span>
-        </div>
-      </div>
-
-      {/* ============================================================
-          6) CIERRE / CTA FINAL
-          ============================================================ */}
-      <section className="bg-primary text-white px-margin-mobile md:px-margin-desktop py-section-gap">
+      <section className="bg-white px-margin-mobile md:px-margin-desktop py-section-gap">
         <div className="max-w-3xl mx-auto text-center space-y-6">
-          <h2 className="font-headline-lg text-headline-lg-mobile md:text-headline-lg uppercase">
+          <h2 className="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary uppercase">
             ¿Listo para traer tu auto?
           </h2>
-          <p className="font-body-lg text-body-lg text-plata">
+          <p className="font-body-lg text-body-lg text-asfalto">
             Pedí tu turno y dejá tu vehículo en manos de un equipo que trabaja
             en serio.
           </p>
@@ -255,9 +528,9 @@ export default function Home() {
               href={WHATSAPP_TURNO_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-secondary text-white font-label-caps text-label-caps px-12 py-5 skew-button hover:bg-white hover:text-primary transition-all duration-300"
+              className="inline-flex items-center gap-2 bg-secondary text-white font-label-caps text-label-caps px-12 py-5 skew-button hover:bg-primary transition-colors duration-300"
             >
-              <span className="material-symbols-outlined text-xl">chat</span>
+              <span className="material-symbols-outlined text-xl" aria-hidden="true">chat</span>
               Pedir turno por WhatsApp
             </a>
           </div>

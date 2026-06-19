@@ -1,7 +1,12 @@
-import type { Metadata } from "next";
 import PedirTurnoFlow from "./PedirTurnoFlow";
+import { pageMetadata } from "@/lib/site-config";
 
-export const metadata: Metadata = { title: "Pedir Turno | 341 BOXES" };
+export const metadata = pageMetadata({
+  title: "Pedir Turno",
+  description:
+    "Pedí tu turno en 341 Boxes: elegí el servicio, contanos de tu auto y coordinamos por WhatsApp. Taller de mecánica integral en Rosario.",
+  path: "/pedir-turno",
+});
 
 export default function PedirTurnoPage() {
   return (

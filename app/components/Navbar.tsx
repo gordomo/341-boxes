@@ -1,59 +1,51 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import Image from "next/image";
 import { useState } from "react";
 import { NAV_ITEMS, SITE, TURNO_HREF } from "@/lib/site-config";
 
-/** ¿La ruta actual corresponde a este item del menú? */
-function isActive(pathname: string, href: string): boolean {
-  if (href === "/") return pathname === "/";
-  // Marca activo también en sub-rutas (ej. /servicios/frenos)
-  return pathname === href || pathname.startsWith(`${href}/`);
-}
-
 export default function Navbar() {
-  const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 inset-x-0 z-50 bg-surface border-b-2 border-primary">
+    <nav className="fixed top-0 inset-x-0 z-50 bg-white border-b-2 border-primary">
       <div className="flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4">
-        {/* Logo */}
+        {/* Logo (imagen oficial de marca) */}
         <Link
           href="/"
           onClick={() => setOpen(false)}
-          className="font-headline-md text-headline-md text-primary uppercase italic leading-none"
+          aria-label={`${SITE.NOMBRE} — Inicio`}
+          className="flex items-center shrink-0"
         >
-          {SITE.NOMBRE}
+          <Image
+            src="/brand/logo.png"
+            alt={SITE.NOMBRE}
+            width={226}
+            height={78}
+            priority
+            className="h-8 md:h-9 w-auto"
+          />
         </Link>
 
-        {/* Menú desktop */}
+        {/* Menú desktop (anclas a secciones de la landing) */}
         <div className="hidden md:flex gap-gutter items-center">
-          {NAV_ITEMS.map((item) => {
-            const active = isActive(pathname, item.href);
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                aria-current={active ? "page" : undefined}
-                className={`font-label-caps text-label-caps uppercase pb-1 border-b-2 transition-colors duration-200 ${
-                  active
-                    ? "text-secondary border-secondary"
-                    : "text-on-surface border-transparent hover:text-secondary"
-                }`}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
+          {NAV_ITEMS.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="font-label-caps text-label-caps uppercase pb-1 border-b-2 text-on-surface border-transparent hover:text-secondary hover:border-secondary transition-colors duration-200"
+            >
+              {item.label}
+            </Link>
+          ))}
         </div>
 
         {/* CTA + hamburguesa */}
         <div className="flex items-center gap-4">
           <Link
             href={TURNO_HREF}
-            className="bg-primary text-on-primary font-label-caps text-technical-data uppercase px-6 py-3 skew-button transition-all active:scale-95 hover:bg-secondary"
+            className="bg-primary text-on-primary font-label-caps text-technical-data uppercase px-4 md:px-6 py-2.5 md:py-3 skew-button transition-all active:scale-95 hover:bg-secondary whitespace-nowrap"
           >
             Pedir Turno
           </Link>
@@ -67,7 +59,7 @@ export default function Navbar() {
             aria-label={open ? "Cerrar menú" : "Abrir menú"}
             className="md:hidden text-primary"
           >
-            <span className="material-symbols-outlined text-3xl">
+            <span className="material-symbols-outlined text-3xl" aria-hidden="true">
               {open ? "close" : "menu"}
             </span>
           </button>
@@ -77,29 +69,21 @@ export default function Navbar() {
       {/* Menú mobile desplegable */}
       <div
         id="mobile-menu"
-        className={`md:hidden overflow-hidden border-t border-outline-variant bg-surface transition-[max-height] duration-300 ease-out ${
+        className={`md:hidden overflow-hidden border-t border-outline-variant bg-white transition-[max-height] duration-300 ease-out ${
           open ? "max-h-96" : "max-h-0"
         }`}
       >
         <div className="flex flex-col px-margin-mobile py-2">
-          {NAV_ITEMS.map((item) => {
-            const active = isActive(pathname, item.href);
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setOpen(false)}
-                aria-current={active ? "page" : undefined}
-                className={`font-label-caps text-label-caps uppercase py-3 border-l-4 pl-4 transition-colors ${
-                  active
-                    ? "text-secondary border-secondary"
-                    : "text-on-surface border-transparent hover:text-secondary"
-                }`}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
+          {NAV_ITEMS.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={() => setOpen(false)}
+              className="font-label-caps text-label-caps uppercase py-3 border-l-4 pl-4 text-on-surface border-transparent hover:text-secondary hover:border-secondary transition-colors"
+            >
+              {item.label}
+            </Link>
+          ))}
         </div>
       </div>
     </nav>

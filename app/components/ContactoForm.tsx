@@ -124,7 +124,7 @@ export default function ContactoForm() {
         className="w-full bg-secondary text-white font-label-caps text-label-caps py-6 uppercase skew-button hover:bg-primary transition-colors flex justify-center items-center gap-4"
       >
         Enviar
-        <span className="material-symbols-outlined">send</span>
+        <span className="material-symbols-outlined" aria-hidden="true">send</span>
       </button>
 
       <p className="font-technical-data text-technical-data text-on-surface-variant">

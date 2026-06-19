@@ -178,6 +178,22 @@
   background-size: 32px 32px;
 }
 
+/* ------------------------------------------------------------
+   Cinta a cuadros blanco/negro (línea de meta) — divisor de
+   marca. Aplicar a un <div> y controlar la altura con Tailwind
+   (ej. h-3 / h-4). El tamaño del cuadro se ajusta con
+   --check-size si hiciera falta.
+   ------------------------------------------------------------ */
+@utility checkered {
+  --check-size: 18px;
+  background-color: #ffffff;
+  background-image: repeating-conic-gradient(
+    #0a0a0a 0deg 90deg,
+    #ffffff 90deg 180deg
+  );
+  background-size: var(--check-size) var(--check-size);
+}
+
 /* Divisor diagonal (recorta la sección en ángulo) */
 @utility diagonal-divider {
   clip-path: polygon(0 0, 100% 15%, 100% 100%, 0 85%);
@@ -247,8 +263,16 @@
    ============================================================ */
 
 @layer base {
+  html {
+    /* Scroll suave entre secciones de la landing + compensación
+       del alto de la navbar fija (≈72px) al saltar a un ancla. */
+    scroll-behavior: smooth;
+    scroll-padding-top: 72px;
+  }
+
   body {
-    background-color: var(--color-surface);
+    /* Blanco como fondo dominante del sitio (regla de marca). */
+    background-color: #ffffff;
     color: var(--color-on-surface);
     font-family: var(--font-body-md);
   }
