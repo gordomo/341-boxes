@@ -248,10 +248,9 @@ export const TURNO_HREF = "/pedir-turno";
 // SEO / METADATA
 // ------------------------------------------------------------
 
-// ⚠️ PLACEHOLDER — URL pública del sitio (dominio final).
-// Se usa como metadataBase para resolver canónicas y la imagen
-// Open Graph. Reemplazar por el dominio real al publicar.
-export const SITE_URL = "https://341boxes.vercel.app";
+// URL pública del sitio (dominio final). Se usa como metadataBase para
+// resolver canónicas y la imagen Open Graph.
+export const SITE_URL = "https://341boxes.ar";
 
 /** Descripción por defecto del sitio (home y fallback de SEO). */
 export const SITE_DESCRIPTION =
