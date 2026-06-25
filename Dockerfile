@@ -11,6 +11,11 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
+# Variables públicas del turnero: Next las hornea en build (NEXT_PUBLIC_*).
+ARG NEXT_PUBLIC_API_URL
+ARG NEXT_PUBLIC_TURNERO_API_KEY
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_TURNERO_API_KEY=$NEXT_PUBLIC_TURNERO_API_KEY
 RUN npm run build
 
 FROM node:20-alpine AS runner

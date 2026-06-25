@@ -70,6 +70,10 @@ function formatFecha(d: Date) {
   return `${DIAS_CORTO[d.getDay()]} ${dd}/${mm}/${d.getFullYear()}`;
 }
 
+// API del turnero (se hornean en build; ver Dockerfile build args).
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
+const TURNERO_KEY = process.env.NEXT_PUBLIC_TURNERO_API_KEY ?? "";
+
 export default function PedirTurnoFlow() {
   const hoy = new Date();
   // Normalizamos "hoy" a medianoche para comparar días sin horas.
@@ -92,6 +96,11 @@ export default function PedirTurnoFlow() {
     vehiculo: "",
     comentario: "",
   });
+
+  // Estado del envío del turno a la API.
+  const [enviando, setEnviando] = useState(false);
+  const [resultado, setResultado] = useState<"idle" | "ok" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
 
   const updateForm =
     (campo: keyof typeof form) =>
@@ -162,6 +171,51 @@ export default function PedirTurnoFlow() {
   ]
     .filter((l) => l !== null)
     .join("\n");
+
+  // ---------- Envío del turno a la API del sistema ----------
+  async function confirmarTurno() {
+    if (!fecha || !hora || enviando) return;
+    setEnviando(true);
+    setErrorMsg("");
+
+    const yyyy = fecha.getFullYear();
+    const mm = String(fecha.getMonth() + 1).padStart(2, "0");
+    const dd = String(fecha.getDate()).padStart(2, "0");
+
+    try {
+      const res = await fetch(`${API_URL}/api/public/appointments`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-Api-Key": TURNERO_KEY },
+        body: JSON.stringify({
+          servicios: serviciosTitulos,
+          fecha: `${yyyy}-${mm}-${dd}`,
+          hora,
+          nombre: form.nombre.trim(),
+          whatsapp: form.whatsapp.trim(),
+          vehiculo: form.vehiculo.trim(),
+          comentario: form.comentario.trim(),
+          _hp: "",
+        }),
+      });
+
+      if (res.ok) {
+        setResultado("ok");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        const data = await res.json().catch(() => null);
+        const msg = data?.errors
+          ? Object.values(data.errors as Record<string, string[]>).flat().join(" ")
+          : (data?.message ?? "No pudimos registrar el turno.");
+        setErrorMsg(msg);
+        setResultado("error");
+      }
+    } catch {
+      setErrorMsg("No pudimos conectar con el taller. Probá de nuevo o escribinos por WhatsApp.");
+      setResultado("error");
+    } finally {
+      setEnviando(false);
+    }
+  }
 
   // ---------- Construcción del mes visible ----------
   const primerDia = new Date(vista.y, vista.m, 1);
@@ -553,18 +607,61 @@ export default function PedirTurnoFlow() {
             </dl>
           </div>
 
-          <a
-            href={waLink(mensajeWhatsApp)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full bg-secondary text-white font-label-caps text-label-caps py-6 uppercase skew-button hover:bg-primary transition-colors flex justify-center items-center gap-4"
-          >
-            Confirmar por WhatsApp
-            <span className="material-symbols-outlined" aria-hidden="true">chat</span>
-          </a>
-          <p className="font-technical-data text-technical-data text-on-surface-variant mt-4 text-center">
-            Te vamos a confirmar el turno por WhatsApp.
-          </p>
+          {resultado === "ok" ? (
+            <div className="border-2 border-secondary technical-border bg-white p-8 text-center">
+              <span className="material-symbols-outlined text-secondary text-5xl" aria-hidden="true">
+                check_circle
+              </span>
+              <h3 className="font-headline-md text-headline-md text-primary uppercase mt-2">
+                ¡Turno solicitado!
+              </h3>
+              <p className="font-body-md text-body-md text-on-surface-variant mt-2">
+                Te vamos a confirmar el turno a la brevedad. ¡Gracias!
+              </p>
+            </div>
+          ) : (
+            <>
+              <button
+                type="button"
+                onClick={confirmarTurno}
+                disabled={enviando}
+                className="w-full bg-secondary text-white font-label-caps text-label-caps py-6 uppercase skew-button hover:bg-primary transition-colors flex justify-center items-center gap-4 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {enviando ? "Enviando…" : "Confirmar turno"}
+                <span className="material-symbols-outlined" aria-hidden="true">
+                  event_available
+                </span>
+              </button>
+
+              {resultado === "error" && (
+                <div className="mt-4 border border-secondary/60 bg-secondary/5 p-4">
+                  <p className="font-body-md text-body-md text-secondary">{errorMsg}</p>
+                  <a
+                    href={waLink(mensajeWhatsApp)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 mt-3 font-label-caps text-label-caps uppercase text-primary underline"
+                  >
+                    Confirmar por WhatsApp
+                    <span className="material-symbols-outlined" aria-hidden="true">chat</span>
+                  </a>
+                </div>
+              )}
+
+              <p className="font-technical-data text-technical-data text-on-surface-variant mt-4 text-center">
+                Te confirmamos el turno a la brevedad. ¿Preferís WhatsApp?{" "}
+                <a
+                  href={waLink(mensajeWhatsApp)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline"
+                >
+                  Escribinos
+                </a>
+                .
+              </p>
+            </>
+          )}
         </section>
       )}
 

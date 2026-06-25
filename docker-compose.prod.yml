@@ -3,6 +3,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        # Se toman del .env junto al compose en el server.
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://taller.341boxes.ar}
+        NEXT_PUBLIC_TURNERO_API_KEY: ${NEXT_PUBLIC_TURNERO_API_KEY:-}
     container_name: boxes341_landing
     restart: unless-stopped
     # Publica el server de Next en el puerto del host (default 3001).
