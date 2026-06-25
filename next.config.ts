@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Salida autocontenida para correr en un contenedor liviano (node server.js).
+  output: "standalone",
+
   // ============================================================
   //  REDIRECCIONES 301 (permanentes)
   //  ------------------------------------------------------------
