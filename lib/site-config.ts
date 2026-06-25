@@ -30,10 +30,10 @@ export const SITE = {
   WHATSAPP: "5493412632104",
 
   // ⚠️ PLACEHOLDER — usuario de Instagram (sin la @)
-  INSTAGRAM: "341boxes",
+  INSTAGRAM: "341.boxes",
 
-  // ⚠️ PLACEHOLDER — email de contacto
-  EMAIL: "contacto@341boxes.com",
+  // Email de contacto.
+  EMAIL: "contacto@341boxes.ar",
 
   // Los horarios de atención viven en HORARIOS_SEMANA (abajo): única
   // fuente de la verdad para la tabla de contacto y la generación
