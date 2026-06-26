@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SITE, waLink, slotsParaDia, estaAbierto } from "@/lib/site-config";
 
 // ============================================================
@@ -74,6 +74,22 @@ function formatFecha(d: Date) {
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 const TURNERO_KEY = process.env.NEXT_PUBLIC_TURNERO_API_KEY ?? "";
 
+type Slot = { time: string; available: boolean };
+type Branch = {
+  id: number;
+  booking: {
+    slot_minutes: number;
+    min_advance_hours: number;
+    max_advance_days: number;
+    hours: Record<string, { open: boolean; from: string | null; to: string | null }>;
+  };
+};
+
+// getDay() 0=Dom .. 6=Sáb → clave de horarios del backend.
+const DOW = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"] as const;
+const ymd = (d: Date) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+
 export default function PedirTurnoFlow() {
   const hoy = new Date();
   // Normalizamos "hoy" a medianoche para comparar días sin horas.
@@ -101,6 +117,39 @@ export default function PedirTurnoFlow() {
   const [enviando, setEnviando] = useState(false);
   const [resultado, setResultado] = useState<"idle" | "ok" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
+
+  // Config de la sucursal + disponibilidad real (desde la API del sistema).
+  const [branch, setBranch] = useState<Branch | null>(null);
+  const [availSlots, setAvailSlots] = useState<Slot[]>([]);
+  const [cargandoSlots, setCargandoSlots] = useState(false);
+
+  // Al montar: traer la sucursal y su config de reservas.
+  useEffect(() => {
+    if (!API_URL || !TURNERO_KEY) return;
+    fetch(`${API_URL}/api/public/branches`, { headers: { "X-Api-Key": TURNERO_KEY } })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (d?.branches?.length) setBranch(d.branches[0]);
+      })
+      .catch(() => {});
+  }, []);
+
+  // Al elegir un día: traer los horarios disponibles reales de esa fecha.
+  useEffect(() => {
+    if (!branch || !fecha) {
+      setAvailSlots([]);
+      return;
+    }
+    setCargandoSlots(true);
+    setHora(null);
+    fetch(`${API_URL}/api/public/availability?branch_id=${branch.id}&date=${ymd(fecha)}`, {
+      headers: { "X-Api-Key": TURNERO_KEY },
+    })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => setAvailSlots(d?.slots ?? []))
+      .catch(() => setAvailSlots([]))
+      .finally(() => setCargandoSlots(false));
+  }, [branch, fecha]);
 
   const updateForm =
     (campo: keyof typeof form) =>
@@ -130,19 +179,34 @@ export default function PedirTurnoFlow() {
   );
   const serviciosTexto = serviciosTitulos.join(", ");
 
-  // Slots de horario disponibles para el día elegido (auto desde site-config).
-  const slotsBase = fecha ? slotsParaDia(fecha) : [];
-  // Si el día elegido es hoy, ocultamos los horarios que ya pasaron.
+  // ¿El taller abre ese día? Si hay config de la API, la usamos; si no, site-config.
+  const diaAbierto = (d: Date): boolean =>
+    branch ? !!branch.booking.hours[DOW[d.getDay()]]?.open : estaAbierto(d);
+
+  // Último día reservable (según anticipación máxima de la sucursal).
+  const maxDay = branch
+    ? new Date(hoy0.getFullYear(), hoy0.getMonth(), hoy0.getDate() + branch.booking.max_advance_days)
+    : null;
+
+  // Slots normalizados a {time, available}. Con API vienen de disponibilidad real;
+  // sin API, fallback a site-config (ocultando los pasados si el día es hoy).
   const esHoy = !!fecha && fecha.getTime() === hoy0.getTime();
-  const slots = (() => {
-    if (!esHoy) return slotsBase;
-    const ahora = new Date();
-    return slotsBase.filter((h) => {
-      const [hh, mm] = h.split(":").map(Number);
-      const slotDate = new Date(hoy0.getFullYear(), hoy0.getMonth(), hoy0.getDate(), hh, mm);
-      return slotDate.getTime() > ahora.getTime();
-    });
-  })();
+  const slots: Slot[] = branch
+    ? availSlots
+    : (() => {
+        const base = fecha ? slotsParaDia(fecha) : [];
+        const ahora = new Date();
+        return base
+          .filter((h) => {
+            if (!esHoy) return true;
+            const [hh, mm] = h.split(":").map(Number);
+            return (
+              new Date(hoy0.getFullYear(), hoy0.getMonth(), hoy0.getDate(), hh, mm).getTime() >
+              ahora.getTime()
+            );
+          })
+          .map((time) => ({ time, available: true }));
+      })();
 
   // ---------- Validación mínima por paso ----------
   const puedeAvanzar =
@@ -198,6 +262,7 @@ export default function PedirTurnoFlow() {
         method: "POST",
         headers: { "Content-Type": "application/json", "X-Api-Key": TURNERO_KEY },
         body: JSON.stringify({
+          branch_id: branch?.id,
           servicios: serviciosTitulos,
           fecha: `${yyyy}-${mm}-${dd}`,
           hora,
@@ -407,8 +472,9 @@ export default function PedirTurnoFlow() {
                   const dia = i + 1;
                   const fechaCelda = new Date(vista.y, vista.m, dia);
                   const pasado = fechaCelda < hoy0;
-                  const cerrado = !estaAbierto(fechaCelda);
-                  const deshabilitado = pasado || cerrado;
+                  const cerrado = !diaAbierto(fechaCelda);
+                  const lejano = !!maxDay && fechaCelda > maxDay;
+                  const deshabilitado = pasado || cerrado || lejano;
                   const seleccionado =
                     fecha &&
                     fecha.getFullYear() === vista.y &&
@@ -457,26 +523,34 @@ export default function PedirTurnoFlow() {
                   <p className="font-technical-data text-technical-data text-plata/70">
                     Elegí un día para ver los horarios disponibles.
                   </p>
+                ) : cargandoSlots ? (
+                  <p className="font-technical-data text-technical-data text-plata/70">
+                    Buscando horarios disponibles…
+                  </p>
                 ) : slots.length === 0 ? (
                   <p className="font-technical-data text-technical-data text-plata/70">
                     Ese día no hay horarios disponibles.
                   </p>
                 ) : (
                   <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-3 gap-2">
-                    {slots.map((h) => {
-                      const elegido = hora === h;
+                    {slots.map((s) => {
+                      const elegido = hora === s.time;
                       return (
                         <button
-                          key={h}
+                          key={s.time}
                           type="button"
-                          onClick={() => setHora(h)}
+                          disabled={!s.available}
+                          title={!s.available ? "Sin disponibilidad" : undefined}
+                          onClick={() => setHora(s.time)}
                           className={`py-2.5 font-technical-data text-technical-data border transition-colors ${
                             elegido
                               ? "bg-secondary border-secondary text-white"
-                              : "border-asfalto text-white hover:border-secondary"
+                              : s.available
+                                ? "border-asfalto text-white hover:border-secondary"
+                                : "border-asfalto/30 text-white/30 line-through cursor-not-allowed"
                           }`}
                         >
-                          {h}
+                          {s.time}
                         </button>
                       );
                     })}
