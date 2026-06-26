@@ -182,10 +182,17 @@ export default function Home() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 pt-2">
                 <a
+                  href="/pedir-turno"
+                  className="bg-secondary text-white font-label-caps text-label-caps px-8 py-5 skew-button text-center hover:bg-primary transition-colors duration-300 inline-flex items-center justify-center gap-3"
+                >
+                  <span className="material-symbols-outlined text-xl" aria-hidden="true">event_available</span>
+                  Pedir turno online
+                </a>
+                <a
                   href={WHATSAPP_TURNO_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-secondary text-white font-label-caps text-label-caps px-8 py-5 skew-button text-center hover:bg-primary transition-colors duration-300 inline-flex items-center justify-center gap-3"
+                  className="border-2 border-primary text-primary font-label-caps text-label-caps px-8 py-5 text-center hover:bg-primary hover:text-white transition-colors duration-300 inline-flex items-center justify-center gap-3"
                 >
                   <span className="material-symbols-outlined text-xl" aria-hidden="true">chat</span>
                   Pedir turno por WhatsApp
