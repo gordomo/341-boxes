@@ -358,8 +358,8 @@ export default function PedirTurnoFlow() {
               Elegí día y hora
             </h2>
             <span className="inline-flex items-center gap-2 font-technical-data text-[11px] uppercase tracking-widest text-secondary border border-secondary/50 px-3 py-1">
-              <span className="material-symbols-outlined text-base" aria-hidden="true">visibility</span>
-              Vista previa — coordinamos el horario final por WhatsApp
+              <span className="material-symbols-outlined text-base" aria-hidden="true">event_available</span>
+              Elegí un horario disponible
             </span>
           </div>
 
@@ -484,7 +484,7 @@ export default function PedirTurnoFlow() {
                 )}
               </div>
               <p className="font-technical-data text-[11px] text-on-surface-variant">
-                * Día y hora son tentativos. El turno se confirma por WhatsApp.
+                * El taller confirma tu turno luego de la reserva.
               </p>
             </div>
           </div>
@@ -572,7 +572,7 @@ export default function PedirTurnoFlow() {
                 Ficha de turno
               </span>
               <span className="font-technical-data text-technical-data text-on-surface-variant uppercase bg-plata/20 px-2 py-1">
-                Tentativo
+                A confirmar
               </span>
             </div>
 
@@ -596,7 +596,7 @@ export default function PedirTurnoFlow() {
               </div>
 
               {[
-                { label: "Día / hora tentativos", valor: fechaHoraTexto },
+                { label: "Día / hora", valor: fechaHoraTexto },
                 { label: "Auto", valor: form.vehiculo || "-" },
                 { label: "Nombre", valor: form.nombre || "-" },
                 { label: "WhatsApp", valor: form.whatsapp || "-" },
