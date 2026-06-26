@@ -131,7 +131,18 @@ export default function PedirTurnoFlow() {
   const serviciosTexto = serviciosTitulos.join(", ");
 
   // Slots de horario disponibles para el día elegido (auto desde site-config).
-  const slots = fecha ? slotsParaDia(fecha) : [];
+  const slotsBase = fecha ? slotsParaDia(fecha) : [];
+  // Si el día elegido es hoy, ocultamos los horarios que ya pasaron.
+  const esHoy = !!fecha && fecha.getTime() === hoy0.getTime();
+  const slots = (() => {
+    if (!esHoy) return slotsBase;
+    const ahora = new Date();
+    return slotsBase.filter((h) => {
+      const [hh, mm] = h.split(":").map(Number);
+      const slotDate = new Date(hoy0.getFullYear(), hoy0.getMonth(), hoy0.getDate(), hh, mm);
+      return slotDate.getTime() > ahora.getTime();
+    });
+  })();
 
   // ---------- Validación mínima por paso ----------
   const puedeAvanzar =
@@ -200,7 +211,8 @@ export default function PedirTurnoFlow() {
 
       if (res.ok) {
         setResultado("ok");
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        // No movemos el scroll: el mensaje "¡Turno solicitado!" aparece en el
+        // lugar del botón y debe quedar a la vista.
       } else {
         const data = await res.json().catch(() => null);
         const msg = data?.errors
