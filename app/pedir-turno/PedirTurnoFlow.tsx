@@ -109,6 +109,7 @@ export default function PedirTurnoFlow() {
   const [form, setForm] = useState({
     nombre: "",
     whatsapp: "",
+    email: "",
     vehiculo: "",
     comentario: "",
   });
@@ -215,6 +216,7 @@ export default function PedirTurnoFlow() {
     (paso === 3 &&
       form.nombre.trim() !== "" &&
       form.whatsapp.trim() !== "" &&
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim()) &&
       form.vehiculo.trim() !== "");
 
   function avanzar() {
@@ -268,6 +270,7 @@ export default function PedirTurnoFlow() {
           hora,
           nombre: form.nombre.trim(),
           whatsapp: form.whatsapp.trim(),
+          email: form.email.trim(),
           vehiculo: form.vehiculo.trim(),
           comentario: form.comentario.trim(),
           _hp: "",
@@ -602,6 +605,22 @@ export default function PedirTurnoFlow() {
               />
             </div>
             <div>
+              <label htmlFor="email" className={labelClass}>
+                Email *
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={form.email}
+                onChange={updateForm("email")}
+                placeholder="tu@email.com"
+                className={inputClass}
+              />
+              <p className="font-technical-data text-[11px] text-on-surface-variant mt-1">
+                Te enviamos un mail para confirmar el turno.
+              </p>
+            </div>
+            <div>
               <label htmlFor="vehiculo" className={labelClass}>
                 Vehículo (marca / modelo / año) *
               </label>
@@ -674,6 +693,7 @@ export default function PedirTurnoFlow() {
                 { label: "Auto", valor: form.vehiculo || "-" },
                 { label: "Nombre", valor: form.nombre || "-" },
                 { label: "WhatsApp", valor: form.whatsapp || "-" },
+                { label: "Email", valor: form.email || "-" },
                 ...(form.comentario.trim()
                   ? [{ label: "Comentario", valor: form.comentario.trim() }]
                   : []),
