@@ -118,8 +118,8 @@ const SERVICIOS: Servicio[] = [
     icon: "tire_repair",
     titulo: "Tren delantero",
     descripcion:
-      "Alineación, balanceo y suspensión. Manejo seguro y cubiertas que duran.",
-    dato: { label: "Incluye", valor: "Alineación + balanceo" },
+      "Revisión del tren delantero y sustitución de piezas dañadas. Lo que está muy gastado o roto se cambia para que el manejo sea seguro.",
+    dato: { label: "Incluye", valor: "Diagnóstico + cambio de piezas" },
   },
 ];
 
