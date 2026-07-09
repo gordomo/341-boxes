@@ -144,10 +144,14 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Copyright */}
-      <div className="px-margin-mobile md:px-margin-desktop py-6 border-t border-outline/40">
+      {/* Copyright + titular. El nombre del titular (razón social) debe figurar
+          en el sitio por requisito de verificación de negocio de Meta. */}
+      <div className="px-margin-mobile md:px-margin-desktop py-6 border-t border-outline/40 flex flex-col gap-1">
         <p className="font-technical-data text-technical-data text-plata">
           © {SITE.COPYRIGHT_YEAR} {SITE.NOMBRE}
+        </p>
+        <p className="font-technical-data text-technical-data text-plata">
+          Titular: {SITE.TITULAR} · CUIT {SITE.CUIT}
         </p>
       </div>
     </footer>

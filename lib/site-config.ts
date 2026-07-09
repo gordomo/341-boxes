@@ -35,12 +35,21 @@ export const SITE = {
   // Email de contacto.
   EMAIL: "contacto@341boxes.ar",
 
+  // ✅ CONFIRMADO — Titular del negocio (monotributista). Su nombre debe
+  // figurar en el sitio: lo exige la verificación de negocio de Meta
+  // ("la razón social de la empresa debe aparecer en el sitio web").
+  // Al ser persona física, la "razón social" es el nombre completo.
+  TITULAR: "Litmanovich Alejandro Ignacio",
+
+  // ✅ CONFIRMADO — CUIT del titular (constancia ARCA / Monotributo).
+  CUIT: "20-31363539-3",
+
   // Los horarios de atención viven en HORARIOS_SEMANA (abajo): única
   // fuente de la verdad para la tabla de contacto y la generación
   // automática de turnos en /pedir-turno.
 
   /** Año de copyright (editar según corresponda). */
-  COPYRIGHT_YEAR: 2025,
+  COPYRIGHT_YEAR: 2026,
 } as const;
 
 // ------------------------------------------------------------
