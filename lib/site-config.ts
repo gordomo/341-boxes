@@ -29,8 +29,9 @@ export const SITE = {
   // Visible como "+54 9 3412 63-2104".
   WHATSAPP: "5493412632104",
 
-  // ⚠️ PLACEHOLDER — usuario de Instagram (sin la @)
-  INSTAGRAM: "341.boxes",
+  // ✅ CONFIRMADO — usuario de Instagram (sin la @)
+  // Perfil real: https://www.instagram.com/341boxes/
+  INSTAGRAM: "341boxes",
 
   // Email de contacto.
   EMAIL: "contacto@341boxes.ar",
